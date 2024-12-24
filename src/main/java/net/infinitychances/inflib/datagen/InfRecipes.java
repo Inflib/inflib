@@ -94,6 +94,12 @@ public class InfRecipes extends FabricRecipeProvider {
                     .pattern("ooo").pattern("oio").pattern("ooo")
                     .input('o', outsideInput).input('i', insideInput);
         }
+
+        public static CraftingRecipeJsonBuilder createItemTopRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient top) {
+            return ShapedRecipeJsonBuilder.create(category, output)
+                    .pattern("iti").pattern("iii").pattern("iii")
+                    .input('i', input).input('t', top);
+        }
     }
 
 }
