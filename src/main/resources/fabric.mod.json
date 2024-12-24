@@ -16,13 +16,13 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"net.infinitychances.inflib.InfLib"
+			"com.infinitychances.inflib.InfLib"
 		],
 		"fabric-datagen": [
-			"net.infinitychances.inflib.InfLibDataGenerator"
+			"com.infinitychances.inflib.InfLibDataGenerator"
 		],
 		"client": [
-			"net.infinitychances.inflib.InfLibClient"
+			"com.infinitychances.inflib.InfLibClient"
 		]
 	},
 	"mixins": [

@@ -1,4 +1,4 @@
-package net.infinitychances.inflib;
+package com.infinitychances.inflib;
 
 import net.fabricmc.api.ModInitializer;
 

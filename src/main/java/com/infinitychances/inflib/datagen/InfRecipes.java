@@ -1,8 +1,8 @@
-package net.infinitychances.inflib.datagen;
+package com.infinitychances.inflib.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.infinitychances.inflib.InfLib;
+import com.infinitychances.inflib.InfLib;
 import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder;
 import net.minecraft.data.server.recipe.RecipeExporter;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
@@ -87,7 +87,7 @@ public class InfRecipes extends FabricRecipeProvider {
                     .input('p', ItemTags.PLANKS).input('i', input);
        }
    }
-
+//here
     public static class CustomUseRecipes {
         public static CraftingRecipeJsonBuilder createSurroundingRecipe(RecipeCategory category,ItemConvertible output, Ingredient outsideInput, Ingredient insideInput) {
             return ShapedRecipeJsonBuilder.create(category, output)
