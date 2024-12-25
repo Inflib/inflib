@@ -18,9 +18,6 @@
 		"main": [
 			"com.infinitychances.inflib.InfLib"
 		],
-		"fabric-datagen": [
-			"com.infinitychances.inflib.InfLibDataGenerator"
-		],
 		"client": [
 			"com.infinitychances.inflib.InfLibClient"
 		]

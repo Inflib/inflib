@@ -1,33 +1,15 @@
 package com.infinitychances.inflib.datagen;
 
-import com.infinitychances.inflib.model.InfModels;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import com.infinitychances.inflib.InfLib;
 import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder;
-import net.minecraft.data.server.recipe.RecipeExporter;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.ItemTags;
 
-import java.util.concurrent.CompletableFuture;
 
-
-public class InfRecipes extends FabricRecipeProvider {
-
-    public InfRecipes(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
-        super(output, registriesFuture);
-    }
-
-    @Override
-    public void generate(RecipeExporter recipeExporter) {
-        InfLib.LOGGER.warn("Do not use the generate method from InfRecipes!");
-
-    }
+public class InfRecipes {
 
     public static class ToolRecipes {
        public static CraftingRecipeJsonBuilder createSwordRecipe(ItemConvertible output, Ingredient input) {
