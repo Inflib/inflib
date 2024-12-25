@@ -1,5 +1,6 @@
 package com.infinitychances.inflib.datagen;
 
+import com.infinitychances.inflib.model.InfModels;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import com.infinitychances.inflib.InfLib;
@@ -58,36 +59,48 @@ public class InfRecipes extends FabricRecipeProvider {
                    .pattern(" ii").pattern(" s ").pattern(" s ")
                    .input('i', input).input('s', Items.STICK);
        }
+
    }
 
    public static class ArmorRecipes {
         public static CraftingRecipeJsonBuilder createHelmetRecipe(ItemConvertible output, Ingredient input) {
             return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output)
-                    .pattern("iii").pattern("i i").pattern("   ")
+                    .pattern("iii").pattern("i i")
                     .input('i', input);
         }
+
        public static CraftingRecipeJsonBuilder createChestplateRecipe(ItemConvertible output, Ingredient input) {
            return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output)
                    .pattern("i i").pattern("iii").pattern("iii")
                    .input('i', input);
        }
+
        public static CraftingRecipeJsonBuilder createLeggingsRecipe(ItemConvertible output, Ingredient input) {
            return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output)
                    .pattern("iii").pattern("i i").pattern("i i")
                    .input('i', input);
        }
+
        public static CraftingRecipeJsonBuilder createBootsRecipe(ItemConvertible output, Ingredient input) {
            return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output)
-                   .pattern("   ").pattern("i i").pattern("i i")
+                   .pattern("i i").pattern("i i")
                    .input('i', input);
        }
+
        public static CraftingRecipeJsonBuilder createShieldRecipe(ItemConvertible output, Ingredient input) {
             return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output)
                     .pattern("pip").pattern("ppp").pattern(" p ")
                     .input('p', ItemTags.PLANKS).input('i', input);
        }
+
+       public static CraftingRecipeJsonBuilder createHorseArmorRecipe(ItemConvertible output, Ingredient input) {
+            return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output)
+                    .pattern("i i").pattern("iii").pattern("i i")
+                    .input('i', input);
+       }
+
    }
-//here
+
     public static class CustomUseRecipes {
         public static CraftingRecipeJsonBuilder createSurroundingRecipe(RecipeCategory category,ItemConvertible output, Ingredient outsideInput, Ingredient insideInput) {
             return ShapedRecipeJsonBuilder.create(category, output)
@@ -100,6 +113,13 @@ public class InfRecipes extends FabricRecipeProvider {
                     .pattern("iti").pattern("iii").pattern("iii")
                     .input('i', input).input('t', top);
         }
+
+        public static CraftingRecipeJsonBuilder createItemBottomRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient bottom) {
+            return ShapedRecipeJsonBuilder.create(category, output)
+                    .pattern("iii").pattern("iii").pattern("ibi")
+                    .input('i', input).input('b', bottom);
+        }
+
     }
 
 }

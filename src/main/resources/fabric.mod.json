@@ -3,15 +3,15 @@
 	"id": "inflib",
 	"version": "${version}",
 	"name": "InfLib",
-	"description": "Library created to handle Datagen Recipes, will include GUI, config, and more datagen",
+	"description": "Library containing useful methods and classes made to speed up programming!",
 	"authors": [
-		"Me!"
+		"Infinitychances"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/RC908/inflib"
+		"sources": "https://github.com/Infinitychances/inflib"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/inflib/icon.png",
 	"environment": "*",
 	"entrypoints": {
