@@ -12,14 +12,11 @@
 		"sources": "https://github.com/Infinitychances/inflib"
 	},
 	"license": "MIT",
-	"icon": "assets/inflib/icon.png",
+	"icon": "assets/inflib/inflibIcon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
 			"com.infinitychances.inflib.InfLib"
-		],
-		"client": [
-			"com.infinitychances.inflib.InfLibClient"
 		]
 	},
 	"mixins": [

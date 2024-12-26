@@ -2,14 +2,18 @@ package com.infinitychances.inflib.model;
 
 
 import com.infinitychances.inflib.InfLib;
-import net.minecraft.data.client.Model;
-import net.minecraft.data.client.Models;
-import net.minecraft.data.client.TextureKey;
+import net.minecraft.block.Block;
+import net.minecraft.data.client.*;
 import net.minecraft.util.Identifier;
 
 import java.util.Optional;
 
 public class InfModels extends Models {
+    public static void createBlockModel(Model model, Block block, TextureMap textures,  BlockStateModelGenerator blockStateModelGenerator) {
+        model.upload(block, textures, blockStateModelGenerator.modelCollector);
+        blockStateModelGenerator.registerItemModel(block);
+    }
+
     public static final Model INTERACT_TOP = block("interact_top", TextureKey.BOTTOM, TextureKey.TOP, TextureKey.SIDE, TextureKey.PARTICLE);
     public static final Model JUST_TOP = block("just_top",TextureKey.TOP, TextureKey.SIDE, TextureKey.PARTICLE);
 
