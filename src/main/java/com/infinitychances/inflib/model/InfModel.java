@@ -13,11 +13,13 @@ import java.util.HashMap;
 import java.util.Optional;
 
 public class InfModel {
+    private static HashMap<String, InfModel> idMap = new HashMap<>();
     private static ArrayList<String> usedIds = new ArrayList<>();
+
+
     public Model model;
     public String path;
     public InfModelType type;
-    private static HashMap<String, InfModel> idMap = new HashMap<>();
     public String id;
     public String modOrigin;
 
@@ -31,12 +33,16 @@ public class InfModel {
     private static String getID(InfModelType type, String parent) {
         String str = type.name() +"§"+ parent;
         String id = Base64.getEncoder().encodeToString(str.getBytes());
+        return id;
+    }
+
+    private static String checkId(String id) {
         if(usedIds.contains(id)) {
             InfLib.LOGGER.error("DUPLICATE MODEL FOUND");
-            return "ERROR_DUPLICATE"; //With the current system, it is impossible to encode it as this, so it is safe
+            return null;
         }
-
-        return id;
+        usedIds.add(id);
+        return "WORKED";
     }
 
     //constructor for an InfModel without a need for a variant
@@ -56,10 +62,11 @@ public class InfModel {
             default:
                 InfLib.LOGGER.error("Invalid Type");
         }
-        this.id = getID(type,parent);
-        if(this.id.equals("ERROR_DUPLICATE")) {
-            throw new InvalidInputException("Identical to another InfModel!");
+        String tempId = getID(type, parent);
+        if (checkId(tempId) == null){
+            throw new InvalidInputException("DUPLICATE MODEL BEING CREATED", type + "§" + parent);
         }
+        this.id = tempId;
         idMap.put(this.id, this);
 
         this.modOrigin = ModOrigin;
@@ -74,10 +81,11 @@ public class InfModel {
         } else {
             InfLib.LOGGER.error("Variant Not Supported With this type");
         }
-        this.id = getID(type, parent);
-        if(this.id.equals("ERROR_DUPLICATE")) {
-            throw new InvalidInputException("Identical to another InfModel!");
+        String tempId = getID(type, parent);
+        if (checkId(tempId) == null){
+            throw new InvalidInputException("DUPLICATE MODEL BEING CREATED", type + "§" + parent);
         }
+        this.id = tempId;
         idMap.put(this.id, this);
 
         this.modOrigin = ModOrigin;
