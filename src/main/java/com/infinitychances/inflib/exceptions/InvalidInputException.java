@@ -2,7 +2,7 @@ package com.infinitychances.inflib.exceptions;
 
 public class InvalidInputException extends RuntimeException {
     @java.io.Serial
-    static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 3L;
 
     public InvalidInputException(String message) {
         super("Invalid Input: " + message);

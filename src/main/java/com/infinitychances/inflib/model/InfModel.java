@@ -29,24 +29,24 @@ public class InfModel {
         return (this.path.split("/"))[1];
     }
 
-    //Gives the id from the name. If an id is a duplicate, then the program returns a string to run the error.
+    //Gives the id from the name.
     private static String getID(InfModelType type, String parent) {
         String str = type.name() +"§"+ parent;
-        String id = Base64.getEncoder().encodeToString(str.getBytes());
-        return id;
+        return Base64.getEncoder().encodeToString(str.getBytes());
     }
 
-    private static String checkId(String id) {
+    //checks if an id is a duplicate
+    private static boolean checkId(String id) {
         if(usedIds.contains(id)) {
             InfLib.LOGGER.error("DUPLICATE MODEL FOUND");
-            return null;
+            return false;
         }
         usedIds.add(id);
-        return "WORKED";
+        return true;
     }
 
     //constructor for an InfModel without a need for a variant
-    public InfModel(String ModOrigin, InfModelType type, String parent, TextureKey ... textures) {
+    public InfModel(String ModOrigin, InfModelType type, String parent, TextureKey... textures) {
         switch (type) {
             case BLOCK_VARIANT:
                 InfLib.LOGGER.error("NEEDS VARIANT");
@@ -63,7 +63,7 @@ public class InfModel {
                 InfLib.LOGGER.error("Invalid Type");
         }
         String tempId = getID(type, parent);
-        if (checkId(tempId) == null){
+        if (!checkId(tempId)){
             throw new InvalidInputException("DUPLICATE MODEL BEING CREATED", type + "§" + parent);
         }
         this.id = tempId;
@@ -74,7 +74,7 @@ public class InfModel {
     }
 
     //constructor if there is a variant
-    public InfModel(String ModOrigin, InfModelType type, String parent, String variant, TextureKey ... textures) {
+    public InfModel(String ModOrigin, InfModelType type, String parent, String variant, TextureKey... textures) {
         if (type == InfModelType.BLOCK_VARIANT) {
             this.model = block(ModOrigin, parent, variant, textures);
             this.path = "block/" + parent;
@@ -82,7 +82,7 @@ public class InfModel {
             InfLib.LOGGER.error("Variant Not Supported With this type");
         }
         String tempId = getID(type, parent);
-        if (checkId(tempId) == null){
+        if (!checkId(tempId)){
             throw new InvalidInputException("DUPLICATE MODEL BEING CREATED", type + "§" + parent);
         }
         this.id = tempId;
@@ -111,6 +111,7 @@ public class InfModel {
     }
 
     //returns the InfModel of the id
+    //This is probably a useless function
     public static InfModel getInfModelFromId(String id) {
         return idMap.get(id);
     }
