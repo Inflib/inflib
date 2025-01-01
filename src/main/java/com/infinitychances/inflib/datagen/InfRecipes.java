@@ -14,7 +14,7 @@ public class InfRecipes {
     public static class ToolRecipes {
        public static CraftingRecipeJsonBuilder createSwordRecipe(ItemConvertible output, Ingredient input) {
            return ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, output)
-                   .pattern(" i ").pattern(" i ").pattern(" s ")
+                   .pattern("i").pattern("i").pattern("s")
                    .input('i', input).input('s', Items.STICK);
        }
 
@@ -26,19 +26,19 @@ public class InfRecipes {
 
        public static CraftingRecipeJsonBuilder createAxeRecipe(ItemConvertible output, Ingredient input) {
            return ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, output)
-                   .pattern(" ii").pattern(" si").pattern(" s ")
+                   .pattern("ii").pattern("is").pattern(" s")
                    .input('i', input).input('s', Items.STICK);
        }
 
        public static CraftingRecipeJsonBuilder createShovelRecipe(ItemConvertible output, Ingredient input) {
            return ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, output)
-                   .pattern(" i ").pattern(" s ").pattern(" s ")
+                   .pattern("i").pattern("s").pattern("s")
                    .input('i', input).input('s', Items.STICK);
        }
 
        public static CraftingRecipeJsonBuilder createHoeRecipe(ItemConvertible output, Ingredient input) {
            return ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, output)
-                   .pattern(" ii").pattern(" s ").pattern(" s ")
+                   .pattern("ii").pattern(" s").pattern(" s")
                    .input('i', input).input('s', Items.STICK);
        }
 
@@ -102,6 +102,11 @@ public class InfRecipes {
                     .input('i', input).input('b', bottom);
         }
 
+        public static CraftingRecipeJsonBuilder createMiddleLineRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient line) {
+            return ShapedRecipeJsonBuilder.create(category, output)
+                    .pattern("iii").pattern("lll").pattern("iii")
+                    .input('i', input).input('l', line);
+        }
     }
 
 }

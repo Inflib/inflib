@@ -1,6 +1,5 @@
 package com.infinitychances.inflib.model;
 
-import com.infinitychances.inflib.InfLib;
 import com.infinitychances.inflib.exceptions.InvalidInputException;
 import net.minecraft.data.client.Model;
 
@@ -11,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Optional;
+
+import static com.infinitychances.inflib.InfLib.LOGGER;
 
 public class InfModel {
     private static HashMap<String, InfModel> idMap = new HashMap<>();
@@ -38,7 +39,7 @@ public class InfModel {
     //checks if an id is a duplicate
     private static boolean checkId(String id) {
         if(usedIds.contains(id)) {
-            InfLib.LOGGER.error("DUPLICATE MODEL FOUND");
+            LOGGER.error("DUPLICATE MODEL FOUND");
             return false;
         }
         usedIds.add(id);
@@ -47,9 +48,13 @@ public class InfModel {
 
     //constructor for an InfModel without a need for a variant
     public InfModel(String ModOrigin, InfModelType type, String parent, TextureKey... textures) {
+        if(parent.contains("/")) {
+            LOGGER.error("Invalid Parent Model");
+            throw new IllegalArgumentException("Parent Model Cannot contain a /!");
+        }
         switch (type) {
             case BLOCK_VARIANT:
-                InfLib.LOGGER.error("NEEDS VARIANT");
+                LOGGER.error("NEEDS VARIANT");
                 break;
             case BLOCK:
                 this.model = block(ModOrigin, parent, textures);
@@ -59,12 +64,16 @@ public class InfModel {
                 this.model = item(ModOrigin, parent, textures);
                 this.path = "item/" + parent;
                 break;
+            case NORMAL:
+                this.model = make(textures);
+                this.path = "unavailable/"+parent;
+                break;
             default:
-                InfLib.LOGGER.error("Invalid Type");
+                LOGGER.error("Invalid Type");
         }
         String tempId = getID(type, parent);
         if (!checkId(tempId)){
-            throw new InvalidInputException("DUPLICATE MODEL BEING CREATED", type + "§" + parent);
+            throw new InvalidInputException("DUPLICATE MODEL BEING CREATED", type + " " + parent);
         }
         this.id = tempId;
         idMap.put(this.id, this);
@@ -75,11 +84,15 @@ public class InfModel {
 
     //constructor if there is a variant
     public InfModel(String ModOrigin, InfModelType type, String parent, String variant, TextureKey... textures) {
+        if(parent.contains("/")) {
+            LOGGER.error("Invalid Parent Model");
+            throw new IllegalArgumentException("Parent Model Cannot contain a /!");
+        }
         if (type == InfModelType.BLOCK_VARIANT) {
             this.model = block(ModOrigin, parent, variant, textures);
             this.path = "block/" + parent;
         } else {
-            InfLib.LOGGER.error("Variant Not Supported With this type");
+            LOGGER.error("Variant Not Supported With this type");
         }
         String tempId = getID(type, parent);
         if (!checkId(tempId)){
@@ -92,11 +105,9 @@ public class InfModel {
         this.type = type;
     }
 
-
-    //unused section
-    /*private static Model make(TextureKey... requiredTextureKeys) {
+    private static Model make(TextureKey... requiredTextureKeys) {
         return new Model(Optional.empty(), Optional.empty(), requiredTextureKeys);
-    }*/
+    }
 
     private static Model block(String ModOrigin, String parent, TextureKey... requiredTextureKeys) {
         return new Model(Optional.of(Identifier.of(ModOrigin, "block/" + parent)), Optional.empty(), requiredTextureKeys);
