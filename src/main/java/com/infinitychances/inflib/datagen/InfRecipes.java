@@ -107,6 +107,18 @@ public class InfRecipes {
                     .pattern("iii").pattern("lll").pattern("iii")
                     .input('i', input).input('l', line);
         }
+
+        public static CraftingRecipeJsonBuilder createTopLineRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient line) {
+            return ShapedRecipeJsonBuilder.create(category, output)
+                    .pattern("lll").pattern("iii").pattern("iii")
+                    .input('i', input).input('l', line);
+        }
+
+        public static CraftingRecipeJsonBuilder createBottomLineRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient line) {
+            return ShapedRecipeJsonBuilder.create(category, output)
+                    .pattern("iii").pattern("iii").pattern("lll")
+                    .input('i', input).input('l', line);
+        }
     }
 
 }
