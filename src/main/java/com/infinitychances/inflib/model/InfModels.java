@@ -1,14 +1,21 @@
 package com.infinitychances.inflib.model;
 
 import com.infinitychances.inflib.InfLib;
+import net.fabricmc.api.ModInitializer;
 import net.minecraft.block.Block;
 import net.minecraft.data.client.*;
 import net.minecraft.util.Identifier;
 
 public class InfModels {
-    public static void createBlockModel(InfModel infModel, Block block, TextureMap textures,  BlockStateModelGenerator blockStateModelGenerator) {
+
+    //creates a custom block model with corresponding item model. Mod id defaults to minecraft.
+    public static void createBlockModel(InfModel infModel, Block block, TextureMap textures, BlockStateModelGenerator blockStateModelGenerator, String modId) {
         infModel.model.upload(block, textures, blockStateModelGenerator.modelCollector);
-        blockStateModelGenerator.registerParentedItemModel(block, Identifier.of(infModel.modOrigin, infModel.path));
+        blockStateModelGenerator.registerParentedItemModel(block, Identifier.of(modId, "blocks/" + block.getName()));
+    }
+
+    public static void createBlockModel(InfModel infModel, Block block, TextureMap textures, BlockStateModelGenerator blockStateModelGenerator) {
+        createBlockModel(infModel, block, textures, blockStateModelGenerator, "minecraft");
     }
 
     public static final InfModel INTERACT_TOP = new InfModel(InfLib.MOD_ID, InfModelType.BLOCK,
