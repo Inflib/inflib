@@ -23,11 +23,23 @@ public class InfModel {
     public InfModelType type;
     public String id;
     public String modOrigin;
+    public TextureKey[] requiredKeys;
 
 
     //Returns the section of the path variable that states the name of the model json file.
     public String parsePath(){
         return (this.path.split("/"))[1];
+    }
+
+    protected static String decodeId(String id) {
+        return Base64.getDecoder().decode(id).toString();
+    }
+
+    public static HashMap<InfModelType, String> parseId(String id) {
+        String[] idArray = decodeId(id).split("§");
+        HashMap<InfModelType, String> map = new HashMap<>();
+        map.put(InfModelType.valueOf(idArray[0]), idArray[1]);
+        return map;
     }
 
     //Gives the id from the name.
@@ -73,11 +85,12 @@ public class InfModel {
         }
         String tempId = getID(type, parent);
         if (!checkId(tempId)){
-            throw new InvalidInputException("DUPLICATE MODEL BEING CREATED", type + " " + parent);
+            throw new InvalidInputException("DUPLICATE MODEL BEING CREATED ", type + " " + parent);
         }
         this.id = tempId;
         idMap.put(this.id, this);
 
+        this.requiredKeys = textures;
         this.modOrigin = ModOrigin;
         this.type = type;
     }
@@ -96,11 +109,12 @@ public class InfModel {
         }
         String tempId = getID(type, parent);
         if (!checkId(tempId)){
-            throw new InvalidInputException("DUPLICATE MODEL BEING CREATED", type + "§" + parent);
+            throw new InvalidInputException("DUPLICATE MODEL BEING CREATED ", type + "§" + parent);
         }
         this.id = tempId;
         idMap.put(this.id, this);
 
+        this.requiredKeys = textures;
         this.modOrigin = ModOrigin;
         this.type = type;
     }
