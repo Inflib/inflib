@@ -83,12 +83,7 @@ public class InfRecipes {
 
    }
 
-    public static class CustomUseRecipes {
-        public static CraftingRecipeJsonBuilder createSurroundingRecipe(RecipeCategory category,ItemConvertible output, Ingredient outsideInput, Ingredient insideInput) {
-            return ShapedRecipeJsonBuilder.create(category, output)
-                    .pattern("ooo").pattern("oio").pattern("ooo")
-                    .input('o', outsideInput).input('i', insideInput);
-        }
+    public static class CenteredRecipes {
 
         public static CraftingRecipeJsonBuilder createItemTopRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient top) {
             return ShapedRecipeJsonBuilder.create(category, output)
@@ -96,21 +91,34 @@ public class InfRecipes {
                     .input('i', input).input('t', top);
         }
 
+        public static CraftingRecipeJsonBuilder createSurroundingRecipe(RecipeCategory category, ItemConvertible output, Ingredient outsideInput, Ingredient insideInput) {
+            return ShapedRecipeJsonBuilder.create(category, output)
+                    .pattern("ooo").pattern("oio").pattern("ooo")
+                    .input('o', outsideInput).input('i', insideInput);
+        }
+
+        public static CraftingRecipeJsonBuilder createItemMiddleRecipe(RecipeCategory category, ItemConvertible output, Ingredient outsideInput, Ingredient insideInput) {
+            return createSurroundingRecipe(category, output, outsideInput, insideInput);
+        }
+
         public static CraftingRecipeJsonBuilder createItemBottomRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient bottom) {
             return ShapedRecipeJsonBuilder.create(category, output)
                     .pattern("iii").pattern("iii").pattern("ibi")
                     .input('i', input).input('b', bottom);
         }
+    }
 
-        public static CraftingRecipeJsonBuilder createMiddleLineRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient line) {
-            return ShapedRecipeJsonBuilder.create(category, output)
-                    .pattern("iii").pattern("lll").pattern("iii")
-                    .input('i', input).input('l', line);
-        }
+    public static class LineRecipes {
 
         public static CraftingRecipeJsonBuilder createTopLineRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient line) {
             return ShapedRecipeJsonBuilder.create(category, output)
                     .pattern("lll").pattern("iii").pattern("iii")
+                    .input('i', input).input('l', line);
+        }
+
+        public static CraftingRecipeJsonBuilder createMiddleLineRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient line) {
+            return ShapedRecipeJsonBuilder.create(category, output)
+                    .pattern("iii").pattern("lll").pattern("iii")
                     .input('i', input).input('l', line);
         }
 

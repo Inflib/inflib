@@ -17,46 +17,12 @@ public class InfModel {
     private static HashMap<String, InfModel> idMap = new HashMap<>();
     private static ArrayList<String> usedIds = new ArrayList<>();
 
-
     public Model model;
     public String path;
     public InfModelType type;
     public String id;
     public String modOrigin;
     public TextureKey[] requiredKeys;
-
-
-    //Returns the section of the path variable that states the name of the model json file.
-    public String parsePath(){
-        return (this.path.split("/"))[1];
-    }
-
-    protected static String decodeId(String id) {
-        return Base64.getDecoder().decode(id).toString();
-    }
-
-    public static HashMap<InfModelType, String> parseId(String id) {
-        String[] idArray = decodeId(id).split("§");
-        HashMap<InfModelType, String> map = new HashMap<>();
-        map.put(InfModelType.valueOf(idArray[0]), idArray[1]);
-        return map;
-    }
-
-    //Gives the id from the name.
-    private static String getID(InfModelType type, String parent) {
-        String str = type.name() +"§"+ parent;
-        return Base64.getEncoder().encodeToString(str.getBytes());
-    }
-
-    //checks if an id is a duplicate
-    private static boolean checkId(String id) {
-        if(usedIds.contains(id)) {
-            LOGGER.error("DUPLICATE MODEL FOUND");
-            return false;
-        }
-        usedIds.add(id);
-        return true;
-    }
 
     //constructor for an InfModel without a need for a variant
     public InfModel(String ModOrigin, InfModelType type, String parent, TextureKey... textures) {
@@ -139,6 +105,46 @@ public class InfModel {
     //This is probably a useless function
     public static InfModel getInfModelFromId(String id) {
         return idMap.get(id);
+    }
+
+    //Returns the section of the path variable that states the name of the model json file.
+    public String parsePath(){
+        return parsePath(this.path);
+    }
+
+    public static String parsePath(String path){
+        return (path.split("/"))[1];
+    }
+
+    public HashMap<InfModelType, String> parseId() {
+        return parseId(this.id);
+    }
+
+    public static HashMap<InfModelType, String> parseId(String id) {
+        String[] idArray = decodeId(id).split("§");
+        HashMap<InfModelType, String> map = new HashMap<>();
+        map.put(InfModelType.valueOf(idArray[0]), idArray[1]);
+        return map;
+    }
+
+    //Gives the id from the name.
+    private static String getID(InfModelType type, String parent) {
+        String str = type.name() +"§"+ parent;
+        return Base64.getEncoder().encodeToString(str.getBytes());
+    }
+
+    //checks if an id is a duplicate
+    private static boolean checkId(String id) {
+        if(usedIds.contains(id)) {
+            LOGGER.error("DUPLICATE MODEL FOUND");
+            return false;
+        }
+        usedIds.add(id);
+        return true;
+    }
+
+    protected static String decodeId(String id) {
+        return Base64.getDecoder().decode(id).toString();
     }
 }
 
