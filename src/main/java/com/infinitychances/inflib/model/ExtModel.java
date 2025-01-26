@@ -1,10 +1,14 @@
 package com.infinitychances.inflib.model;
 
 import com.infinitychances.inflib.exceptions.InvalidInputException;
+import net.minecraft.block.Block;
+import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.Model;
 
 import net.minecraft.data.client.TextureKey;
+import net.minecraft.data.client.TextureMap;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Base64;
@@ -13,19 +17,19 @@ import java.util.Optional;
 
 import static com.infinitychances.inflib.InfLib.LOGGER;
 
-public class InfModel {
-    private static HashMap<String, InfModel> idMap = new HashMap<>();
+public class ExtModel {
+    private static HashMap<String, ExtModel> idMap = new HashMap<>();
     private static ArrayList<String> usedIds = new ArrayList<>();
 
     public Model model;
     public String path;
-    public InfModelType type;
+    public ExtModelType type;
     public String id;
     public String modOrigin;
     public TextureKey[] requiredKeys;
 
-    //constructor for an InfModel without a need for a variant
-    public InfModel(String ModOrigin, InfModelType type, String parent, TextureKey... textures) {
+    //constructor for an ExtModel without a need for a variant
+    public ExtModel(String ModOrigin, ExtModelType type, String parent, TextureKey... textures) {
         if(parent.contains("/")) {
             LOGGER.error("Invalid Parent Model");
             throw new IllegalArgumentException("Parent Model Cannot contain a /!");
@@ -62,12 +66,12 @@ public class InfModel {
     }
 
     //constructor if there is a variant
-    public InfModel(String ModOrigin, InfModelType type, String parent, String variant, TextureKey... textures) {
+    public ExtModel(String ModOrigin, ExtModelType type, String parent, String variant, TextureKey... textures) {
         if(parent.contains("/")) {
             LOGGER.error("Invalid Parent Model");
             throw new IllegalArgumentException("Parent Model Cannot contain a /!");
         }
-        if (type == InfModelType.BLOCK_VARIANT) {
+        if (type == ExtModelType.BLOCK_VARIANT) {
             this.model = block(ModOrigin, parent, variant, textures);
             this.path = "block/" + parent;
         } else {
@@ -101,9 +105,9 @@ public class InfModel {
         return new Model(Optional.of(Identifier.of(ModOrigin, "block/" + parent)), Optional.of(variant), requiredTextureKeys);
     }
 
-    //returns the InfModel of the id
+    //returns the ExtModel of the id
     //This is probably a useless function
-    public static InfModel getInfModelFromId(String id) {
+    public static ExtModel getExtModelFromId(String id) {
         return idMap.get(id);
     }
 
@@ -116,19 +120,19 @@ public class InfModel {
         return (path.split("/"))[1];
     }
 
-    public HashMap<InfModelType, String> parseId() {
+    public HashMap<ExtModelType, String> parseId() {
         return parseId(this.id);
     }
 
-    public static HashMap<InfModelType, String> parseId(String id) {
+    public static HashMap<ExtModelType, String> parseId(String id) {
         String[] idArray = decodeId(id).split("§");
-        HashMap<InfModelType, String> map = new HashMap<>();
-        map.put(InfModelType.valueOf(idArray[0]), idArray[1]);
+        HashMap<ExtModelType, String> map = new HashMap<>();
+        map.put(ExtModelType.valueOf(idArray[0]), idArray[1]);
         return map;
     }
 
     //Gives the id from the name.
-    private static String getID(InfModelType type, String parent) {
+    private static String getID(@NotNull ExtModelType type, String parent) {
         String str = type.name() +"§"+ parent;
         return Base64.getEncoder().encodeToString(str.getBytes());
     }
@@ -145,6 +149,14 @@ public class InfModel {
 
     protected static String decodeId(String id) {
         return Base64.getDecoder().decode(id).toString();
+    }
+
+    public void createBlockModel(Block block, TextureMap textures, BlockStateModelGenerator blockStateModelGenerator,  String modId) {
+        ExtModels.createBlockModel(this, block, textures, blockStateModelGenerator, modId);
+    }
+
+    public void createBlockModel(Block block, TextureMap textures, BlockStateModelGenerator blockStateModelGenerator) {
+        ExtModels.createBlockModel(this, block, textures, blockStateModelGenerator);
     }
 }
 
