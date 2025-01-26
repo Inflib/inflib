@@ -13,19 +13,19 @@ import java.util.Optional;
 
 import static com.infinitychances.inflib.InfLib.LOGGER;
 
-public class InfModel {
-    private static HashMap<String, InfModel> idMap = new HashMap<>();
+public class ExtModel {
+    private static HashMap<String, ExtModel> idMap = new HashMap<>();
     private static ArrayList<String> usedIds = new ArrayList<>();
 
     public Model model;
     public String path;
-    public InfModelType type;
+    public ExtModelType type;
     public String id;
     public String modOrigin;
     public TextureKey[] requiredKeys;
 
-    //constructor for an InfModel without a need for a variant
-    public InfModel(String ModOrigin, InfModelType type, String parent, TextureKey... textures) {
+    //constructor for an ExtModel without a need for a variant
+    public ExtModel(String ModOrigin, ExtModelType type, String parent, TextureKey... textures) {
         if(parent.contains("/")) {
             LOGGER.error("Invalid Parent Model");
             throw new IllegalArgumentException("Parent Model Cannot contain a /!");
@@ -62,12 +62,12 @@ public class InfModel {
     }
 
     //constructor if there is a variant
-    public InfModel(String ModOrigin, InfModelType type, String parent, String variant, TextureKey... textures) {
+    public ExtModel(String ModOrigin, ExtModelType type, String parent, String variant, TextureKey... textures) {
         if(parent.contains("/")) {
             LOGGER.error("Invalid Parent Model");
             throw new IllegalArgumentException("Parent Model Cannot contain a /!");
         }
-        if (type == InfModelType.BLOCK_VARIANT) {
+        if (type == ExtModelType.BLOCK_VARIANT) {
             this.model = block(ModOrigin, parent, variant, textures);
             this.path = "block/" + parent;
         } else {
@@ -101,9 +101,9 @@ public class InfModel {
         return new Model(Optional.of(Identifier.of(ModOrigin, "block/" + parent)), Optional.of(variant), requiredTextureKeys);
     }
 
-    //returns the InfModel of the id
+    //returns the ExtModel of the id
     //This is probably a useless function
-    public static InfModel getInfModelFromId(String id) {
+    public static ExtModel getExtModelFromId(String id) {
         return idMap.get(id);
     }
 
@@ -116,19 +116,19 @@ public class InfModel {
         return (path.split("/"))[1];
     }
 
-    public HashMap<InfModelType, String> parseId() {
+    public HashMap<ExtModelType, String> parseId() {
         return parseId(this.id);
     }
 
-    public static HashMap<InfModelType, String> parseId(String id) {
+    public static HashMap<ExtModelType, String> parseId(String id) {
         String[] idArray = decodeId(id).split("§");
-        HashMap<InfModelType, String> map = new HashMap<>();
-        map.put(InfModelType.valueOf(idArray[0]), idArray[1]);
+        HashMap<ExtModelType, String> map = new HashMap<>();
+        map.put(ExtModelType.valueOf(idArray[0]), idArray[1]);
         return map;
     }
 
     //Gives the id from the name.
-    private static String getID(InfModelType type, String parent) {
+    private static String getID(ExtModelType type, String parent) {
         String str = type.name() +"§"+ parent;
         return Base64.getEncoder().encodeToString(str.getBytes());
     }

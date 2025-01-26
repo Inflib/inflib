@@ -1,6 +1,6 @@
 package com.infinitychances.inflib.model;
 
-public enum InfModelType {
+public enum ExtModelType {
     BLOCK_VARIANT,
     BLOCK,
     ITEM,
