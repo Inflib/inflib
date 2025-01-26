@@ -1,10 +1,14 @@
 package com.infinitychances.inflib.model;
 
 import com.infinitychances.inflib.exceptions.InvalidInputException;
+import net.minecraft.block.Block;
+import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.Model;
 
 import net.minecraft.data.client.TextureKey;
+import net.minecraft.data.client.TextureMap;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Base64;
@@ -128,7 +132,7 @@ public class ExtModel {
     }
 
     //Gives the id from the name.
-    private static String getID(ExtModelType type, String parent) {
+    private static String getID(@NotNull ExtModelType type, String parent) {
         String str = type.name() +"§"+ parent;
         return Base64.getEncoder().encodeToString(str.getBytes());
     }
@@ -145,6 +149,14 @@ public class ExtModel {
 
     protected static String decodeId(String id) {
         return Base64.getDecoder().decode(id).toString();
+    }
+
+    public void createBlockModel(Block block, TextureMap textures, BlockStateModelGenerator blockStateModelGenerator,  String modId) {
+        ExtModels.createBlockModel(this, block, textures, blockStateModelGenerator, modId);
+    }
+
+    public void createBlockModel(Block block, TextureMap textures, BlockStateModelGenerator blockStateModelGenerator) {
+        ExtModels.createBlockModel(this, block, textures, blockStateModelGenerator);
     }
 }
 
