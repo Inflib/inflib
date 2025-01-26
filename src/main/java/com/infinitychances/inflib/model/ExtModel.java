@@ -55,7 +55,7 @@ public class ExtModel {
         }
         String tempId = getID(type, parent);
         if (!checkId(tempId)){
-            throw new InvalidInputException("DUPLICATE MODEL BEING CREATED ", type + " " + parent);
+            throw new InvalidInputException("DUPLICATE MODEL BEING CREATED", type + " " + parent);
         }
         this.id = tempId;
         idMap.put(this.id, this);
@@ -79,7 +79,7 @@ public class ExtModel {
         }
         String tempId = getID(type, parent);
         if (!checkId(tempId)){
-            throw new InvalidInputException("DUPLICATE MODEL BEING CREATED ", type + "§" + parent);
+            throw new InvalidInputException("DUPLICATE MODEL BEING CREATED", type + "§" + parent);
         }
         this.id = tempId;
         idMap.put(this.id, this);

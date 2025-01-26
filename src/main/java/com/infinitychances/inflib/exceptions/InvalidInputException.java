@@ -2,13 +2,13 @@ package com.infinitychances.inflib.exceptions;
 
 public class InvalidInputException extends RuntimeException {
     @java.io.Serial
-    private static final long serialVersionUID = 3L;
+    private static final long serialVersionUID = 5L;
 
     public InvalidInputException(String message) {
         super("Invalid Input: " + message);
     }
-
+    //Just extra thing to it
     public InvalidInputException(String message, String cause) {
-        super("Invalid Input: " + message + cause);
+        super("Invalid Input: " + message + "\n Caused By: " + cause);
     }
 }
