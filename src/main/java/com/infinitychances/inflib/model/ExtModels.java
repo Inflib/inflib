@@ -17,19 +17,19 @@ public class ExtModels {
         createBlockModel(extModel, block, textures, blockStateModelGenerator, "minecraft");
     }
 
-    public static final ExtModel INTERACT_TOP = new ExtModel(InfLib.MOD_ID, ExtModelType.BLOCK,
+    public static final ExtModel INTERACT_TOP = ExtModel.of(InfLib.MOD_ID, ExtModelType.BLOCK,
             "interact_top",
             TextureKey.BOTTOM, TextureKey.TOP, TextureKey.SIDE, TextureKey.PARTICLE);
 
-    public static final ExtModel JUST_TOP = new ExtModel(InfLib.MOD_ID, ExtModelType.BLOCK, "just_top",
+    public static final ExtModel JUST_TOP = ExtModel.of(InfLib.MOD_ID, ExtModelType.BLOCK, "just_top",
             TextureKey.TOP, TextureKey.SIDE, TextureKey.PARTICLE);
 
-    public static final ExtModel INTERACT_TOP_NORTH_SOUTH = new ExtModel(InfLib.MOD_ID,
+    public static final ExtModel INTERACT_TOP_NORTH_SOUTH = ExtModel.of(InfLib.MOD_ID,
             ExtModelType.BLOCK_VARIANT,
             "interact_top_north_south", "_north_south",
             TextureKey.BOTTOM, TextureKey.TOP, TextureKey.FRONT, TextureKey.PARTICLE, TextureKey.SIDE);
 
-    public static final ExtModel INTERACT_TOP_EAST_WEST = new ExtModel(InfLib.MOD_ID,
+    public static final ExtModel INTERACT_TOP_EAST_WEST = ExtModel.of(InfLib.MOD_ID,
             ExtModelType.BLOCK_VARIANT,
             "interact_top_east_west", "_east_west",
             TextureKey.BOTTOM, TextureKey.TOP, TextureKey.FRONT, TextureKey.PARTICLE, TextureKey.SIDE);

@@ -28,8 +28,17 @@ public class ExtModel {
     public String modOrigin;
     public TextureKey[] requiredKeys;
 
+    private ExtModel() {
+        this.model = null;
+        this.path = null;
+        this.type = null;
+        this.id = null;
+        this.modOrigin = null;
+        this.requiredKeys = null;
+    }
+
     //constructor for an ExtModel without a need for a variant
-    public ExtModel(String ModOrigin, ExtModelType type, String parent, TextureKey... textures) {
+    protected ExtModel(String ModOrigin, ExtModelType type, String parent, TextureKey... textures) {
         if(parent.contains("/")) {
             LOGGER.error("Invalid Parent Model");
             throw new IllegalArgumentException("Parent Model Cannot contain a /!");
@@ -66,7 +75,7 @@ public class ExtModel {
     }
 
     //constructor if there is a variant
-    public ExtModel(String ModOrigin, ExtModelType type, String parent, String variant, TextureKey... textures) {
+    protected ExtModel(String ModOrigin, ExtModelType type, String parent, String variant, TextureKey... textures) {
         if(parent.contains("/")) {
             LOGGER.error("Invalid Parent Model");
             throw new IllegalArgumentException("Parent Model Cannot contain a /!");
@@ -87,6 +96,22 @@ public class ExtModel {
         this.requiredKeys = textures;
         this.modOrigin = ModOrigin;
         this.type = type;
+    }
+
+    public static ExtModel of(String ModOrigin, ExtModelType type, String parent, String variant, TextureKey... textures) {
+        return new ExtModel(ModOrigin,type,parent,variant,textures);
+    }
+
+    public static ExtModel of(String ModOrigin, ExtModelType type, String parent, TextureKey... textures) {
+        return new ExtModel(ModOrigin,type,parent,textures);
+    }
+
+    public static ExtModel of(ExtModelType type, String parent, String variant, TextureKey... textures) {
+        return new ExtModel("minecraft",type,parent,variant,textures);
+    }
+
+    public static ExtModel of(ExtModelType type, String parent, TextureKey... textures) {
+        return new ExtModel("minecraft",type,parent,textures);
     }
 
     private static Model make(TextureKey... requiredTextureKeys) {
