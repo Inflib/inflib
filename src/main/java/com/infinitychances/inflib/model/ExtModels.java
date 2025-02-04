@@ -17,9 +17,12 @@ public class ExtModels {
         createBlockModel(extModel, block, textures, blockStateModelGenerator, "minecraft");
     }
 
-    public static final ExtModel INTERACT_TOP = ExtModel.of(InfLib.MOD_ID, ExtModelType.BLOCK,
-            "interact_top",
-            TextureKey.BOTTOM, TextureKey.TOP, TextureKey.SIDE, TextureKey.PARTICLE);
+    public static final ExtModel INTERACT_TOP = ExtModelBuilder.create()
+            .modOrigin(InfLib.MOD_ID)
+            .name("interact_top")
+            .type(ExtModelType.BLOCK)
+            .requiredKeys(TextureKey.BOTTOM, TextureKey.TOP, TextureKey.SIDE, TextureKey.PARTICLE)
+            .build();
 
     public static final ExtModel JUST_TOP = ExtModel.of(InfLib.MOD_ID, ExtModelType.BLOCK, "just_top",
             TextureKey.TOP, TextureKey.SIDE, TextureKey.PARTICLE);
