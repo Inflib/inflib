@@ -2,27 +2,24 @@
 	"schemaVersion": 1,
 	"id": "inflib",
 	"version": "${version}",
-	"name": "inflib",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "InfLib",
+	"description": "Library containing useful methods and classes made to speed up programming!",
 	"authors": [
-		"Me!"
+		"Infinitychances"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/Infinitychances/inflib"
 	},
-	"license": "CC0-1.0",
-	"icon": "assets/inflib/icon.png",
+	"license": "MIT",
+	"icon": "assets/inflib/inflibIcon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.infinitychances.inflib.Inflib"
+			"com.infinitychances.inflib.InfLib"
 		],
 		"client": [
-			"com.infinitychances.inflib.InflibClient"
-		],
-		"fabric-datagen": [
-			"com.infinitychances.inflib.InflibDataGenerator"
+			"com.infinitychances.inflib.InfLibClient"
 		]
 	},
 	"mixins": [
@@ -40,5 +37,14 @@
 	},
 	"suggests": {
 		"another-mod": "*"
+	},
+	"custom": {
+		"modmenu": {
+			"links": {
+				"modmenu.github_releases": "https://github.com/InfinityChances/inflib/releases"
+			},
+			"badges": [ "library" ],
+			"update_checker": true
+		}
 	}
 }
