@@ -17,6 +17,9 @@
 	"entrypoints": {
 		"main": [
 			"com.infinitychances.inflib.InfLib"
+		],
+		"client": [
+			"com.infinitychances.inflib.InflibClient"
 		]
 	},
 	"mixins": [
@@ -30,5 +33,14 @@
 	},
 	"suggests": {
 		"another-mod": "*"
+	},
+	"custom": {
+		"modmenu": {
+			"links": {
+				"modmenu.github_releases": "https://github.com/InfinityChances/inflib/releases"
+			},
+			"badges": [ "library" ],
+			"update_checker": true
+		}
 	}
 }
