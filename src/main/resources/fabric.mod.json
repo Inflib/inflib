@@ -3,7 +3,7 @@
 	"id": "inflib",
 	"version": "${version}",
 	"name": "InfLib",
-	"description": "Library containing useful methods and classes made to speed up programming!",
+	"description": "Library containing useful methods and classes made to speed up moddding!",
 	"authors": [
 		"Infinitychances"
 	],
@@ -36,7 +36,8 @@
 		"fabric-api": "*"
 	},
 	"suggests": {
-		"another-mod": "*"
+		"another-mod": "*",
+		"sodium": ">=0.6.0"
 	},
 	"custom": {
 		"modmenu": {
