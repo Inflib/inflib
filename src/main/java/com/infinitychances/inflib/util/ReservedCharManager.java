@@ -3,7 +3,7 @@ package com.infinitychances.inflib.util;
 
 import java.util.ArrayList;
 
-public abstract class ReservedCharManager {
+public final class ReservedCharManager {
     private ReservedCharManager() {
 
     }
