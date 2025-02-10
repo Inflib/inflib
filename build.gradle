@@ -82,6 +82,9 @@ publishing {
 			artifactId = project.archives_base_name
 			from components.java
 		}
+		gpr(MavenPublication) {
+			from(components.java)
+		}
 	}
 
 	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
@@ -90,5 +93,13 @@ publishing {
 		// Notice: This block does NOT have the same function as the block in the top level.
 		// The repositories here will be used for publishing your artifact, not for
 		// retrieving dependencies.
+		maven {
+			name = "GitHubPackages"
+			url = uri("https://maven.pkg.github.com/infinitychances/inflib")
+			credentials {
+				username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+				password = System.getenv("GITHUB_TOKEN")
+			}
+		}
 	}
 }
