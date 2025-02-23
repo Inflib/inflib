@@ -9,9 +9,12 @@ import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.tag.ItemTags;
 
 
-public class PreMadeRecipes {
+public class ExtRecipes {
+    private ExtRecipes() {}
 
     public static class ToolRecipes {
+        private ToolRecipes() {}
+
        public static CraftingRecipeJsonBuilder createSwordRecipe(ItemConvertible output, Ingredient input) {
            return ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, output)
                    .pattern("i").pattern("i").pattern("s")
@@ -44,7 +47,9 @@ public class PreMadeRecipes {
 
    }
 
-   public static class ArmorRecipes {
+    public static class ArmorRecipes {
+        private ArmorRecipes() {}
+
         public static CraftingRecipeJsonBuilder createHelmetRecipe(ItemConvertible output, Ingredient input) {
             return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output)
                     .pattern("iii").pattern("i i")
@@ -83,12 +88,13 @@ public class PreMadeRecipes {
 
    }
 
-    public static class CenteredRecipes {
+    public static class SurroundedRecipes {
+        private SurroundedRecipes() {}
 
-        public static CraftingRecipeJsonBuilder createItemTopRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient top) {
+        public static CraftingRecipeJsonBuilder createItemTopRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient topInput) {
             return ShapedRecipeJsonBuilder.create(category, output)
                     .pattern("iti").pattern("iii").pattern("iii")
-                    .input('i', input).input('t', top);
+                    .input('i', input).input('t', topInput);
         }
 
         public static CraftingRecipeJsonBuilder createSurroundingRecipe(RecipeCategory category, ItemConvertible output, Ingredient outsideInput, Ingredient insideInput) {
@@ -109,6 +115,7 @@ public class PreMadeRecipes {
     }
 
     public static class LineRecipes {
+        private LineRecipes() {}
 
         public static CraftingRecipeJsonBuilder createTopLineRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient line) {
             return ShapedRecipeJsonBuilder.create(category, output)
@@ -126,6 +133,41 @@ public class PreMadeRecipes {
             return ShapedRecipeJsonBuilder.create(category, output)
                     .pattern("iii").pattern("iii").pattern("lll")
                     .input('i', input).input('l', line);
+        }
+    }
+
+    public static class SurroundedAirRecipes {
+        private SurroundedAirRecipes() {}
+
+
+        public static CraftingRecipeJsonBuilder createAirCenterRecipe(RecipeCategory category, ItemConvertible output, Ingredient input) {
+            return createAirCenterRecipe(category, output, input, 1);
+        }
+
+        public static CraftingRecipeJsonBuilder createAirCenterRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Integer count) {
+            return ShapedRecipeJsonBuilder.create(category, output, count)
+                    .pattern("iii").pattern("i i").pattern("iii")
+                    .input('i', input);
+        }
+
+        public static CraftingRecipeJsonBuilder createAirTopRecipe(RecipeCategory category, ItemConvertible output, Ingredient input) {
+            return createAirTopRecipe(category, output, input, 1);
+        }
+
+        public static CraftingRecipeJsonBuilder createAirTopRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Integer count) {
+            return ShapedRecipeJsonBuilder.create(category, output, count)
+                    .pattern("i i").pattern("iii").pattern("iii")
+                    .input('i', input);
+        }
+
+        public static CraftingRecipeJsonBuilder createAirBottomRecipe(RecipeCategory category, ItemConvertible output, Ingredient input) {
+            return createAirBottomRecipe(category, output, input, 1);
+        }
+
+        public static CraftingRecipeJsonBuilder createAirBottomRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Integer count) {
+            return ShapedRecipeJsonBuilder.create(category, output, count)
+                    .pattern("iii").pattern("iii").pattern("i i")
+                    .input('i', input);
         }
     }
 
