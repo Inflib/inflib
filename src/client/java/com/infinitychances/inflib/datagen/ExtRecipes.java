@@ -71,37 +71,61 @@ public class ExtRecipes {
         private ArmorRecipes() {}
 
         public static CraftingRecipeJsonBuilder createHelmetRecipe(ItemConvertible output, Ingredient input) {
-            return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output)
+            return createHelmetRecipe(output, input, 1);
+        }
+
+        public static CraftingRecipeJsonBuilder createHelmetRecipe(ItemConvertible output, Ingredient input, Integer count) {
+            return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output, count)
                     .pattern("iii").pattern("i i")
                     .input('i', input);
         }
 
-       public static CraftingRecipeJsonBuilder createChestplateRecipe(ItemConvertible output, Ingredient input) {
-           return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output)
+        public static CraftingRecipeJsonBuilder createChestplateRecipe(ItemConvertible output, Ingredient input) {
+            return createChestplateRecipe(output, input, 1);
+        }
+
+        public static CraftingRecipeJsonBuilder createChestplateRecipe(ItemConvertible output, Ingredient input, Integer count) {
+           return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output, count)
                    .pattern("i i").pattern("iii").pattern("iii")
                    .input('i', input);
        }
 
-       public static CraftingRecipeJsonBuilder createLeggingsRecipe(ItemConvertible output, Ingredient input) {
-           return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output)
+        public static CraftingRecipeJsonBuilder createLeggingsRecipe(ItemConvertible output, Ingredient input) {
+            return createLeggingsRecipe(output, input, 1);
+        }
+
+        public static CraftingRecipeJsonBuilder createLeggingsRecipe(ItemConvertible output, Ingredient input, Integer count) {
+           return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output, count)
                    .pattern("iii").pattern("i i").pattern("i i")
                    .input('i', input);
        }
 
-       public static CraftingRecipeJsonBuilder createBootsRecipe(ItemConvertible output, Ingredient input) {
-           return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output)
+        public static CraftingRecipeJsonBuilder createBootsRecipe(ItemConvertible output, Ingredient input) {
+            return createBootsRecipe(output, input, 1);
+        }
+
+        public static CraftingRecipeJsonBuilder createBootsRecipe(ItemConvertible output, Ingredient input, Integer count) {
+           return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output, count)
                    .pattern("i i").pattern("i i")
                    .input('i', input);
        }
 
-       public static CraftingRecipeJsonBuilder createShieldRecipe(ItemConvertible output, Ingredient input) {
-            return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output)
+        public static CraftingRecipeJsonBuilder createShieldRecipe(ItemConvertible output, Ingredient input) {
+            return createShieldRecipe(output, input, 1);
+        }
+
+        public static CraftingRecipeJsonBuilder createShieldRecipe(ItemConvertible output, Ingredient input, Integer count) {
+            return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output, count)
                     .pattern("pip").pattern("ppp").pattern(" p ")
                     .input('p', ItemTags.PLANKS).input('i', input);
        }
 
-       public static CraftingRecipeJsonBuilder createHorseArmorRecipe(ItemConvertible output, Ingredient input) {
-            return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output)
+        public static CraftingRecipeJsonBuilder createHorseArmorRecipe(ItemConvertible output, Ingredient input) {
+            return createHorseArmorRecipe(output, input, 1);
+        }
+
+        public static CraftingRecipeJsonBuilder createHorseArmorRecipe(ItemConvertible output, Ingredient input, Integer count) {
+            return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output, count)
                     .pattern("i i").pattern("iii").pattern("i i")
                     .input('i', input);
        }
