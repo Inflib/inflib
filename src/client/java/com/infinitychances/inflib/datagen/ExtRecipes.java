@@ -171,4 +171,38 @@ public class ExtRecipes {
         }
     }
 
+    public static class LineAirRecipes {
+        private LineAirRecipes() {}
+
+        public static CraftingRecipeJsonBuilder createTopLineAirRecipe(RecipeCategory category, ItemConvertible output, Ingredient input) {
+            return createTopLineAirRecipe(category, output, input, 1);
+        }
+
+        public static CraftingRecipeJsonBuilder createTopLineAirRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Integer count) {
+            return ShapedRecipeJsonBuilder.create(category, output, count)
+                    .pattern("   ").pattern("iii").pattern("iii")
+                    .input('i', input);
+        }
+
+        public static CraftingRecipeJsonBuilder createMiddleLineAirRecipe(RecipeCategory category, ItemConvertible output, Ingredient input) {
+            return createMiddleLineAirRecipe(category, output, input, 1);
+        }
+
+        public static CraftingRecipeJsonBuilder createMiddleLineAirRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Integer count) {
+            return ShapedRecipeJsonBuilder.create(category, output, count)
+                    .pattern("iii").pattern("   ").pattern("iii")
+                    .input('i', input);
+        }
+
+        public static CraftingRecipeJsonBuilder createBottomLineAirRecipe(RecipeCategory category, ItemConvertible output, Ingredient input) {
+            return createBottomLineAirRecipe(category, output, input, 1);
+        }
+
+        public static CraftingRecipeJsonBuilder createBottomLineAirRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Integer count) {
+            return ShapedRecipeJsonBuilder.create(category, output, count)
+                    .pattern("iii").pattern("iii").pattern("   ")
+                    .input('i', input);
+        }
+    }
+
 }
