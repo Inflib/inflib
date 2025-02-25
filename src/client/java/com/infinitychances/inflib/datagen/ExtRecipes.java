@@ -15,32 +15,52 @@ public class ExtRecipes {
     public static class ToolRecipes {
         private ToolRecipes() {}
 
-       public static CraftingRecipeJsonBuilder createSwordRecipe(ItemConvertible output, Ingredient input) {
-           return ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, output)
+        public static CraftingRecipeJsonBuilder createSwordRecipe(ItemConvertible output, Ingredient input) {
+            return createSwordRecipe(output, input, 1);
+        }
+
+        public static CraftingRecipeJsonBuilder createSwordRecipe(ItemConvertible output, Ingredient input, Integer count) {
+           return ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, output, count)
                    .pattern("i").pattern("i").pattern("s")
                    .input('i', input).input('s', Items.STICK);
        }
 
-       public static CraftingRecipeJsonBuilder createPickaxeRecipe(ItemConvertible output, Ingredient input) {
-           return ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, output)
+        public static CraftingRecipeJsonBuilder createPickaxeRecipe(ItemConvertible output, Ingredient input) {
+            return createPickaxeRecipe(output, input, 1);
+        }
+
+        public static CraftingRecipeJsonBuilder createPickaxeRecipe(ItemConvertible output, Ingredient input, Integer count) {
+           return ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, output, count)
                    .pattern("iii").pattern(" s ").pattern(" s ")
                    .input('i', input).input('s', Items.STICK);
        }
 
-       public static CraftingRecipeJsonBuilder createAxeRecipe(ItemConvertible output, Ingredient input) {
-           return ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, output)
+        public static CraftingRecipeJsonBuilder createAxeRecipe(ItemConvertible output, Ingredient input) {
+            return createAxeRecipe(output, input, 1);
+        }
+
+        public static CraftingRecipeJsonBuilder createAxeRecipe(ItemConvertible output, Ingredient input, Integer count) {
+           return ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, output, count)
                    .pattern("ii").pattern("is").pattern(" s")
                    .input('i', input).input('s', Items.STICK);
        }
 
-       public static CraftingRecipeJsonBuilder createShovelRecipe(ItemConvertible output, Ingredient input) {
-           return ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, output)
+        public static CraftingRecipeJsonBuilder createShovelRecipe(ItemConvertible output, Ingredient input) {
+            return createShovelRecipe(output, input, 1);
+        }
+
+        public static CraftingRecipeJsonBuilder createShovelRecipe(ItemConvertible output, Ingredient input, Integer count) {
+           return ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, output, count)
                    .pattern("i").pattern("s").pattern("s")
                    .input('i', input).input('s', Items.STICK);
        }
 
-       public static CraftingRecipeJsonBuilder createHoeRecipe(ItemConvertible output, Ingredient input) {
-           return ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, output)
+        public static CraftingRecipeJsonBuilder createHoeRecipe(ItemConvertible output, Ingredient input) {
+            return createHoeRecipe(output, input, 1);
+        }
+
+        public static CraftingRecipeJsonBuilder createHoeRecipe(ItemConvertible output, Ingredient input, Integer count) {
+           return ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, output, count)
                    .pattern("ii").pattern(" s").pattern(" s")
                    .input('i', input).input('s', Items.STICK);
        }
