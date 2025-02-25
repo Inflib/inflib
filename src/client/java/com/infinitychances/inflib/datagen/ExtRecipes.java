@@ -132,27 +132,43 @@ public class ExtRecipes {
 
    }
 
-    public static class SurroundedRecipes {
-        private SurroundedRecipes() {}
+    public static class SurroundingRecipes {
+        private SurroundingRecipes() {}
 
-        public static CraftingRecipeJsonBuilder createItemTopRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient topInput) {
-            return ShapedRecipeJsonBuilder.create(category, output)
+        public static CraftingRecipeJsonBuilder createItemTopRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient top) {
+            return createItemTopRecipe(category, output, input, top, 1);
+        }
+
+        public static CraftingRecipeJsonBuilder createItemTopRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient top, Integer count) {
+            return ShapedRecipeJsonBuilder.create(category, output, count)
                     .pattern("iti").pattern("iii").pattern("iii")
-                    .input('i', input).input('t', topInput);
+                    .input('i', input).input('t', top);
         }
 
-        public static CraftingRecipeJsonBuilder createSurroundingRecipe(RecipeCategory category, ItemConvertible output, Ingredient outsideInput, Ingredient insideInput) {
-            return ShapedRecipeJsonBuilder.create(category, output)
+        public static CraftingRecipeJsonBuilder createSurroundingRecipe(RecipeCategory category, ItemConvertible output, Ingredient outside, Ingredient inside) {
+            return createSurroundingRecipe(category, output, outside, inside, 1);
+        }
+
+        public static CraftingRecipeJsonBuilder createSurroundingRecipe(RecipeCategory category, ItemConvertible output, Ingredient outside, Ingredient inside, Integer count) {
+            return ShapedRecipeJsonBuilder.create(category, output, count)
                     .pattern("ooo").pattern("oio").pattern("ooo")
-                    .input('o', outsideInput).input('i', insideInput);
+                    .input('o', outside).input('i', inside);
         }
 
-        public static CraftingRecipeJsonBuilder createItemMiddleRecipe(RecipeCategory category, ItemConvertible output, Ingredient outsideInput, Ingredient insideInput) {
-            return createSurroundingRecipe(category, output, outsideInput, insideInput);
+        public static CraftingRecipeJsonBuilder createItemMiddleRecipe(RecipeCategory category, ItemConvertible output, Ingredient outside, Ingredient inside) {
+            return createItemMiddleRecipe(category, output, outside, inside, 1);
+        }
+
+        public static CraftingRecipeJsonBuilder createItemMiddleRecipe(RecipeCategory category, ItemConvertible output, Ingredient outside, Ingredient inside, Integer count) {
+            return createSurroundingRecipe(category, output, outside, inside, count);
         }
 
         public static CraftingRecipeJsonBuilder createItemBottomRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient bottom) {
-            return ShapedRecipeJsonBuilder.create(category, output)
+            return createItemBottomRecipe(category, output, input, bottom, 1);
+        }
+
+        public static CraftingRecipeJsonBuilder createItemBottomRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient bottom, Integer count) {
+            return ShapedRecipeJsonBuilder.create(category, output, count)
                     .pattern("iii").pattern("iii").pattern("ibi")
                     .input('i', input).input('b', bottom);
         }
