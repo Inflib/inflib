@@ -178,19 +178,31 @@ public class ExtRecipes {
         private LineRecipes() {}
 
         public static CraftingRecipeJsonBuilder createTopLineRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient line) {
-            return ShapedRecipeJsonBuilder.create(category, output)
+            return createTopLineRecipe(category, output, input, line, 1);
+        }
+
+        public static CraftingRecipeJsonBuilder createTopLineRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient line, Integer count) {
+            return ShapedRecipeJsonBuilder.create(category, output, count)
                     .pattern("lll").pattern("iii").pattern("iii")
                     .input('i', input).input('l', line);
         }
 
         public static CraftingRecipeJsonBuilder createMiddleLineRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient line) {
-            return ShapedRecipeJsonBuilder.create(category, output)
+            return createMiddleLineRecipe(category, output, input, line, 1);
+        }
+
+        public static CraftingRecipeJsonBuilder createMiddleLineRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient line, Integer count) {
+            return ShapedRecipeJsonBuilder.create(category, output, count)
                     .pattern("iii").pattern("lll").pattern("iii")
                     .input('i', input).input('l', line);
         }
 
         public static CraftingRecipeJsonBuilder createBottomLineRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient line) {
-            return ShapedRecipeJsonBuilder.create(category, output)
+            return createBottomLineRecipe(category, output, input, line, 1);
+        }
+
+        public static CraftingRecipeJsonBuilder createBottomLineRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient line, Integer count) {
+            return ShapedRecipeJsonBuilder.create(category, output, count)
                     .pattern("iii").pattern("iii").pattern("lll")
                     .input('i', input).input('l', line);
         }
