@@ -4,6 +4,7 @@
 build/
 out/
 classes/
+logs/
 
 # eclipse
 
@@ -38,3 +39,6 @@ hs_err_*.log
 replay_*.log
 *.hprof
 *.jfr
+
+# tests
+src/test/
