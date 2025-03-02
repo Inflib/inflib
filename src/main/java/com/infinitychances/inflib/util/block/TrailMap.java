@@ -12,11 +12,11 @@ public class TrailMap<T> {
 
     }
 
-    private static String tokenize(String key, int count) {
+    public static String tokenize(String key, int count) {
         return key + SPLIT_CHAR + count;
     }
 
-    private static String tokenize(String key) {
+    public static String tokenize(String key) {
         return key + SPLIT_CHAR + 0;
     }
 
@@ -48,6 +48,9 @@ public class TrailMap<T> {
     }
 
     public T getNextFromIndex(String key, Integer index) {
+        if(!map.containsKey(tokenize(key))) {
+            throw new IllegalArgumentException("Key does not exist!");
+        }
         return map.get(tokenize(key, index+1));
     }
 
@@ -71,7 +74,31 @@ public class TrailMap<T> {
         return null;
     }
     
+    public void replaceFromIndex(String key, Integer index, T newValue) {
+        if(!map.containsKey(tokenize(key))) {
+            throw new IllegalArgumentException("Key does not exist!");
+        }
+        if(!map.containsKey(tokenize(key, index))) {
+            throw new IllegalArgumentException("Cannot create new values!");
+        }
+        map.replace(tokenize(key, index), newValue);
+    }
     
+    public void addToEnd(String key, T newValue) {
+        if(!map.containsKey(tokenize(key))) {
+            throw new IllegalArgumentException("Key does not exist!");
+        }
+        Integer index = holdMap.get(key);
+        map.put(tokenize(key, index), newValue);
+        holdMap.replace(key, index+1);
+    }
+    
+    @SafeVarargs
+    public final void addToEnd(String key, T... newValues) {
+        for(T val : newValues) {
+            addToEnd(key, val);
+        }
+    }
     
     //creates the toString method to mention each key and value chain.
     @Override
@@ -91,5 +118,9 @@ public class TrailMap<T> {
             }
         }
         return string.toString();
+    }
+    
+    public void print() {
+        System.out.println(this);
     }
 }
