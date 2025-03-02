@@ -2,15 +2,27 @@ package com.infinitychances.inflib.util;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public final class ReservedCharManager {
-    private ReservedCharManager() {
+public final class ReservedStuffManager {
+    private ReservedStuffManager() {
 
     }
 
-    //private static final ReservedCharManager INSTANCE = new ReservedCharManager();
+    //private static final ReservedStuffManager INSTANCE = new ReservedStuffManager();
+
+    public static final String SPLIT_CHAR = "≈";
 
     private static final String[] RESERVED_CHARACTERS = {"≈"/*247*/, "∞"/*236*/, "»"/*175*/, "«"/*174*/, "•"/*7*/};
+    private static final Map<String, Integer> ALT_CODES_START = Map.of(
+            "≈", 247,
+            "∞", 236,
+            "»", 175,
+            "«", 174,
+            "•", 7
+    );
+    private static final HashMap<String, Integer> ALT_CODES = new HashMap<>(ALT_CODES_START);
     private static final ArrayList<String> TEMP_RESERVED = new ArrayList<>();
     private static final String[] NUMBERS = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
     private static final String[] LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
@@ -68,6 +80,14 @@ public final class ReservedCharManager {
 
     public static String[] requestReservedList() {
         return RESERVED_CHARACTERS;
+    }
+
+    public static Integer getAltCodeOfCharacter(String character) {
+        return ALT_CODES.get(character);
+    }
+
+    public static Integer getAltCodeOfCharacter(Character character) {
+        return getAltCodeOfCharacter(character.toString());
     }
 
     public static void addTempReservedCharacter(Character character) {
