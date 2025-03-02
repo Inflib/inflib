@@ -2,6 +2,7 @@ package com.infinitychances.inflib.util;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -98,6 +99,7 @@ public final class ReservedStuffManager {
     }
 
     public static String[] requestTempReservedList() {
-        return (String[]) TEMP_RESERVED.toArray();
+        String[] array = new String[TEMP_RESERVED.size()];
+        return TEMP_RESERVED.toArray(array);
     }
 }
