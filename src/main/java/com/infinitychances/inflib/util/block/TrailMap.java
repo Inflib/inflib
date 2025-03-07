@@ -121,6 +121,15 @@ public class TrailMap<T> {
         map.put(tokenize(key, index), item);
     }
     
+    @SafeVarargs
+    public final void insert(String key, Integer index, T... items) {
+        Integer i = index;
+        for(T item : items) {
+            insert(key, i, item);
+            i++;
+        }
+    }
+    
     //creates the toString method to mention each key and value chain.
     @Override
     public String toString() {
