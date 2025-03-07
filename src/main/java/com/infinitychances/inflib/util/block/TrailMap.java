@@ -110,7 +110,7 @@ public class TrailMap<T> {
             throw new IllegalArgumentException("Key does not exist!");
         }
         index = Math.clamp(index.longValue(), 0, holdMap.get(key));
-        if(index == holdMap.get(key)) {
+        if(index.intValue() == holdMap.get(key).intValue()) {
             addToEnd(key, item);
             return;
         }
