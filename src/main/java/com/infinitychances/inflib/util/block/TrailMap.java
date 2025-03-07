@@ -1,5 +1,7 @@
 package com.infinitychances.inflib.util.block;
 
+import com.infinitychances.inflib.InfLib;
+
 import java.util.HashMap;
 import static com.infinitychances.inflib.util.ReservedStuffManager.*;
 
@@ -13,11 +15,14 @@ public class TrailMap<T> {
     }
 
     public static String tokenize(String key, int count) {
+        if(count < 0) {
+            throw new IllegalArgumentException("cannot tokenize a negative value!");
+        }
         return key + SPLIT_CHAR + count;
     }
 
     public static String tokenize(String key) {
-        return key + SPLIT_CHAR + 0;
+        return tokenize(key, 0);
     }
 
     private static String[] detokenize(String token) {
@@ -66,7 +71,7 @@ public class TrailMap<T> {
         for(int i=0; i < holdMap.get(key); i++) {
             //inferences to get first value with same type.
             String newKey = tokenize(key, i);
-            T currentCheck = map.get(tokenize(key, Integer.parseInt(detokenize(newKey)[1])+1));
+            T currentCheck = map.get(tokenize(key, i+1));
             if(map.get(newKey).equals(item)) {
                 return currentCheck;
             }
@@ -100,6 +105,22 @@ public class TrailMap<T> {
         }
     }
     
+    public void insert(String key, Integer index, T item) {
+        if(!map.containsKey(tokenize(key))) {
+            throw new IllegalArgumentException("Key does not exist!");
+        }
+        index = Math.clamp(index.longValue(), 0, holdMap.get(key));
+        if(index == holdMap.get(key)) {
+            addToEnd(key, item);
+            return;
+        }
+        for(int i = (holdMap.get(key) - 1); i >= index; i--) {
+            map.put(tokenize(key, i+1), map.remove(tokenize(key, i)));
+        }
+        holdMap.replace(key, holdMap.get(key)+1);
+        map.put(tokenize(key, index), item);
+    }
+    
     //creates the toString method to mention each key and value chain.
     @Override
     public String toString() {
@@ -121,6 +142,26 @@ public class TrailMap<T> {
     }
     
     public void print() {
-        System.out.println(this);
+        InfLib.LOGGER.info(this.toString());
+    }
+    
+    public void printKey(String key) {
+        if(!map.containsKey(tokenize(key))) {
+            throw new IllegalArgumentException("Key does not exist!");
+        }
+        //basically just the toString method.
+        StringBuilder string = new StringBuilder();
+        Integer count = holdMap.get(key);
+        string.append("Key: ").append(key).append(";").append(" Values: ");
+        for(int i = 0; i < count; i++) {
+            String item = map.get(tokenize(key, i)).toString();
+            string.append(item);
+            if(i != count - 1) {
+                string.append(", ");
+            } else {
+                string.append("; ");
+            }
+        }
+        InfLib.LOGGER.info(string.toString());
     }
 }
