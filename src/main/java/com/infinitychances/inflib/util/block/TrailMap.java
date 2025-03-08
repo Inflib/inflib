@@ -8,27 +8,11 @@ import static com.infinitychances.inflib.util.ReservedStuffManager.*;
 public class TrailMap<T> {
     private HashMap<String, T> map = new HashMap<>();
     private HashMap<String, Integer> holdMap = new HashMap<>();
-
-
+    
     public TrailMap() {
 
     }
-
-    public static String tokenize(String key, int count) {
-        if(count < 0) {
-            throw new IllegalArgumentException("cannot tokenize a negative value!");
-        }
-        return key + SPLIT_CHAR + count;
-    }
-
-    public static String tokenize(String key) {
-        return tokenize(key, 0);
-    }
-
-    private static String[] detokenize(String token) {
-        return token.split(SPLIT_CHAR);
-    }
-
+    
     //Do not map empty ArrayLists, HashMaps, Maps, etc...
     @SafeVarargs
     public final void map(String key, T... listOrder) {
@@ -47,9 +31,38 @@ public class TrailMap<T> {
         }
         holdMap.put(key, iterate);
     }
+    
+    /*TOKEN HANDLERS*/
 
+    public static String tokenize(String key, int count) {
+        if(count < 0) {
+            throw new IllegalArgumentException("cannot tokenize a negative value!");
+        }
+        return key + SPLIT_CHAR + count;
+    }
+
+    public static String tokenize(String key) {
+        return tokenize(key, 0);
+    }
+
+    private static String[] detokenize(String token) {
+        return token.split(SPLIT_CHAR);
+    }
+    
+    /*MAIN TOOLS*/
+    
     public T getFromIndex(String key, Integer index) {
         return map.get(tokenize(key, index));
+    }
+    
+    public void replaceFromIndex(String key, Integer index, T newValue) {
+        if(!map.containsKey(tokenize(key))) {
+            throw new IllegalArgumentException("Key does not exist!");
+        }
+        if(!map.containsKey(tokenize(key, index))) {
+            throw new IllegalArgumentException("Cannot create new values!");
+        }
+        map.replace(tokenize(key, index), newValue);
     }
 
     public T getNextFromIndex(String key, Integer index) {
@@ -79,16 +92,6 @@ public class TrailMap<T> {
         return null;
     }
     
-    public void replaceFromIndex(String key, Integer index, T newValue) {
-        if(!map.containsKey(tokenize(key))) {
-            throw new IllegalArgumentException("Key does not exist!");
-        }
-        if(!map.containsKey(tokenize(key, index))) {
-            throw new IllegalArgumentException("Cannot create new values!");
-        }
-        map.replace(tokenize(key, index), newValue);
-    }
-    
     public void addToEnd(String key, T newValue) {
         if(!map.containsKey(tokenize(key))) {
             throw new IllegalArgumentException("Key does not exist!");
@@ -96,13 +99,6 @@ public class TrailMap<T> {
         Integer index = holdMap.get(key);
         map.put(tokenize(key, index), newValue);
         holdMap.replace(key, index+1);
-    }
-    
-    @SafeVarargs
-    public final void addToEnd(String key, T... newValues) {
-        for(T val : newValues) {
-            addToEnd(key, val);
-        }
     }
     
     public void insert(String key, Integer index, T item) {
@@ -116,9 +112,23 @@ public class TrailMap<T> {
         }
         for(int i = (holdMap.get(key) - 1); i >= index; i--) {
             map.put(tokenize(key, i+1), map.remove(tokenize(key, i)));
+            //starts from the highest value, bumps them all up until there is one spot left for the new value
         }
         holdMap.replace(key, holdMap.get(key)+1);
         map.put(tokenize(key, index), item);
+    }
+    
+    public void addToBeginning(String key, T item) {
+        insert(key, 0, item);
+    }
+    
+    /*LOOPED VERSIONS*/
+    
+    @SafeVarargs
+    public final void addToEnd(String key, T... newValues) {
+        for(T val : newValues) {
+            addToEnd(key, val);
+        }
     }
     
     @SafeVarargs
@@ -129,6 +139,8 @@ public class TrailMap<T> {
             i++;
         }
     }
+    
+    /*STRING AND PRINT MANAGERS*/
     
     //creates the toString method to mention each key and value chain.
     @Override
