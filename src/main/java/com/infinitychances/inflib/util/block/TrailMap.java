@@ -9,13 +9,11 @@ public class TrailMap<T> {
     private HashMap<String, T> map = new HashMap<>();
     private HashMap<String, Integer> holdMap = new HashMap<>();
     
-    public TrailMap() {
-
-    }
+    public TrailMap() {}
     
     //Do not map empty ArrayLists, HashMaps, Maps, etc...
     @SafeVarargs
-    public final void map(String key, T... listOrder) {
+    public final TrailMap<T> map(String key, T... listOrder) {
         if(holdMap != null) {
             if(holdMap.containsKey(key)) {
                 throw new IllegalArgumentException("Key cannot be the same as another one!");
@@ -30,6 +28,7 @@ public class TrailMap<T> {
             iterate++;
         }
         holdMap.put(key, iterate);
+        return this;
     }
     
     /*TOKEN HANDLERS*/
