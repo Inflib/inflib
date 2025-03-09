@@ -54,14 +54,14 @@ public class TrailMap<T> {
         return map.get(tokenize(key, index));
     }
     
-    public void replaceFromIndex(String key, Integer index, T newValue) {
+    public void replaceFromIndex(String key, Integer index, T item) {
         if(!map.containsKey(tokenize(key))) {
             throw new IllegalArgumentException("Key does not exist!");
         }
         if(!map.containsKey(tokenize(key, index))) {
             throw new IllegalArgumentException("Cannot create new values!");
         }
-        map.replace(tokenize(key, index), newValue);
+        map.replace(tokenize(key, index), item);
     }
 
     public T getNextFromIndex(String key, Integer index) {
@@ -91,12 +91,12 @@ public class TrailMap<T> {
         return null;
     }
     
-    public void addToEnd(String key, T newValue) {
+    public void addToEnd(String key, T item) {
         if(!map.containsKey(tokenize(key))) {
             throw new IllegalArgumentException("Key does not exist!");
         }
         Integer index = holdMap.get(key);
-        map.put(tokenize(key, index), newValue);
+        map.put(tokenize(key, index), item);
         holdMap.replace(key, index+1);
     }
     
@@ -124,8 +124,8 @@ public class TrailMap<T> {
     /*LOOPED VERSIONS*/
     
     @SafeVarargs
-    public final void addToEnd(String key, T... newValues) {
-        for(T val : newValues) {
+    public final void addToEnd(String key, T... items) {
+        for(T val : items) {
             addToEnd(key, val);
         }
     }
@@ -136,6 +136,13 @@ public class TrailMap<T> {
         for(T item : items) {
             insert(key, i, item);
             i++;
+        }
+    }
+    
+    @SafeVarargs
+    public final void addToBeginning(String key, T... items) {
+        for (T item : items) {
+            addToBeginning(key, item);
         }
     }
     
