@@ -18,7 +18,7 @@ repositories {
 	// for more information about repositories.
 
 	mavenCentral()
-	maven { url 'https://jitpack.io' }
+	maven { url = 'https://jitpack.io' }
 }
 
 loom {
