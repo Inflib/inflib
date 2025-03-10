@@ -141,8 +141,8 @@ public class TrailMap<T> {
     
     @SafeVarargs
     public final void addToBeginning(String key, T... items) {
-        for (T item : items) {
-            addToBeginning(key, item);
+        for(int i = items.length - 1; i >= 0; i--) {
+            addToBeginning(key, items[i]);
         }
     }
     
