@@ -489,31 +489,64 @@ public class ExtRecipes {
 
     public static class LineAirRecipes {
         private LineAirRecipes() {}
-
+        
+        public static void offerTopLineAirRecipe(RecipeCategory category, ItemConvertible output, Item input, RecipeExporter exporter) {
+            offerTopLineAirRecipe(category, output, input, 1, exporter);
+        }
+        
         public static CraftingRecipeJsonBuilder createTopLineAirRecipe(RecipeCategory category, ItemConvertible output, Ingredient input) {
             return createTopLineAirRecipe(category, output, input, 1);
         }
-
+        
+        public static void offerTopLineAirRecipe(RecipeCategory category, ItemConvertible output, Item input, Integer count, RecipeExporter exporter) {
+            handleModId();
+            createTopLineAirRecipe(category, output, Ingredient.ofItems(input), count)
+                    .criterion(RecipeProvider.hasItem(input), RecipeProvider.conditionsFromItem(input))
+                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+        }
+        
         public static CraftingRecipeJsonBuilder createTopLineAirRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Integer count) {
             return ShapedRecipeJsonBuilder.create(category, output, count)
                     .pattern("   ").pattern("iii").pattern("iii")
                     .input('i', input);
         }
-
+        
+        public static void offerMiddleLineAirRecipe(RecipeCategory category, ItemConvertible output, Item input, RecipeExporter exporter) {
+            offerMiddleLineAirRecipe(category, output, input, 1, exporter);
+        }
+        
         public static CraftingRecipeJsonBuilder createMiddleLineAirRecipe(RecipeCategory category, ItemConvertible output, Ingredient input) {
             return createMiddleLineAirRecipe(category, output, input, 1);
         }
-
+        
+        public static void offerMiddleLineAirRecipe(RecipeCategory category, ItemConvertible output, Item input, Integer count, RecipeExporter exporter) {
+            handleModId();
+            createMiddleLineAirRecipe(category, output, Ingredient.ofItems(input), count)
+                    .criterion(RecipeProvider.hasItem(input), RecipeProvider.conditionsFromItem(input))
+                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+        }
+        
         public static CraftingRecipeJsonBuilder createMiddleLineAirRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Integer count) {
             return ShapedRecipeJsonBuilder.create(category, output, count)
                     .pattern("iii").pattern("   ").pattern("iii")
                     .input('i', input);
         }
 
+        public static void offerBottomLineAirRecipe(RecipeCategory category, ItemConvertible output, Item input, RecipeExporter exporter) {
+            offerBottomLineAirRecipe(category, output, input, 1, exporter);
+        }
+        
         public static CraftingRecipeJsonBuilder createBottomLineAirRecipe(RecipeCategory category, ItemConvertible output, Ingredient input) {
             return createBottomLineAirRecipe(category, output, input, 1);
         }
-
+        
+        public static void offerBottomLineAirRecipe(RecipeCategory category, ItemConvertible output, Item input, Integer count, RecipeExporter exporter) {
+            handleModId();
+            createBottomLineAirRecipe(category, output, Ingredient.ofItems(input), count)
+                    .criterion(RecipeProvider.hasItem(input), RecipeProvider.conditionsFromItem(input))
+                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+        }
+        
         public static CraftingRecipeJsonBuilder createBottomLineAirRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Integer count) {
             return ShapedRecipeJsonBuilder.create(category, output, count)
                     .pattern("iii").pattern("iii").pattern("   ")
