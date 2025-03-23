@@ -40,13 +40,13 @@ public final class ReservedStuffManager {
         return b;
     }
 
-    public static boolean isReserved(String string, Boolean runTempList) {
+    public static boolean isReserved(String string, Boolean runExtraList) {
         boolean b = false;
         for(String str : RESERVED_CHARACTERS) {
             b = string.contains(str);
             if(b) {break;}
         }
-        if(!runTempList) {
+        if(!runExtraList) {
             return b;
         }
         for(String str : TEMP_RESERVED) {
@@ -90,14 +90,14 @@ public final class ReservedStuffManager {
         return getAltCodeOfCharacter(character.toString());
     }
 
-    public static void addTempReservedCharacter(Character character) {
+    public static void addReservedCharacter(Character character) {
         if(hasAlphaNumeric(character.toString())) {
             throw new IllegalArgumentException("character cannot be a letter or a number!");
         }
         TEMP_RESERVED.add(character.toString());
     }
 
-    public static String[] requestTempReservedList() {
+    public static String[] requestExtraReservedList() {
         String[] array = new String[TEMP_RESERVED.size()];
         return TEMP_RESERVED.toArray(array);
     }

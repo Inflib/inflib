@@ -95,7 +95,7 @@ public class TrailMap<T> {
         if(!map.containsKey(tokenize(key))) {
             throw new IllegalArgumentException("Key does not exist!");
         }
-        return index - 1 < 0 ? null : map.get(tokenize(key, index-1));
+        return index < 1 ? null : map.get(tokenize(key, index-1));
     }
     
     public T getPreviousInChain(String key, T item) {
@@ -131,7 +131,7 @@ public class TrailMap<T> {
         if(!map.containsKey(tokenize(key))) {
             throw new IllegalArgumentException("Key does not exist!");
         }
-        index = Math.clamp(index.longValue(), 0, holdMap.get(key));
+        index = Math.clamp(index, 0, holdMap.get(key));
         if(index.intValue() == holdMap.get(key).intValue()) {
             addToEnd(key, item);
             return;
