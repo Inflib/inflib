@@ -41,4 +41,4 @@ replay_*.log
 *.jfr
 
 # tests
-src/test/java/com/infinitychances/infilib/
+src/test/java/com/infinitychances/inflib/
