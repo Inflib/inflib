@@ -3,11 +3,11 @@ package com.infinitychances.inflib.model;
 import static com.infinitychances.inflib.InfLib.LOGGER;
 import com.infinitychances.inflib.exceptions.InvalidInputException;
 import net.minecraft.block.Block;
-import net.minecraft.data.client.BlockStateModelGenerator;
-import net.minecraft.data.client.Model;
+import net.minecraft.client.data.BlockStateModelGenerator;
+import net.minecraft.client.data.Model;
+import net.minecraft.client.data.TextureKey;
+import net.minecraft.client.data.TextureMap;
 
-import net.minecraft.data.client.TextureKey;
-import net.minecraft.data.client.TextureMap;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
@@ -176,7 +176,7 @@ public class ExtModel{
         return Base64.getDecoder().decode(id).toString();
     }
 
-    public void createBlockModel(Block block, TextureMap textures, BlockStateModelGenerator blockStateModelGenerator,  String modId) {
+    public void createBlockModel(Block block, TextureMap textures, BlockStateModelGenerator blockStateModelGenerator, String modId) {
         ExtModels.createBlockModel(this, block, textures, blockStateModelGenerator, modId);
     }
 

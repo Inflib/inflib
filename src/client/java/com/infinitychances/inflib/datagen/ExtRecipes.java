@@ -1,15 +1,18 @@
 package com.infinitychances.inflib.datagen;
 
 import com.infinitychances.inflib.exceptions.MissingValueException;
-import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder;
-import net.minecraft.data.server.recipe.RecipeExporter;
-import net.minecraft.data.server.recipe.RecipeProvider;
-import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
+import net.minecraft.data.recipe.CraftingRecipeJsonBuilder;
+import net.minecraft.data.recipe.RecipeExporter;
+import net.minecraft.data.recipe.RecipeGenerator;
+import net.minecraft.data.recipe.ShapedRecipeJsonBuilder;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.book.RecipeCategory;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.Identifier;
 
@@ -18,21 +21,41 @@ public class ExtRecipes {
     private ExtRecipes() {}
     
     static String modId;
+    static RecipeGenerator generator;
+    static RegistryWrapper.WrapperLookup lookup;
     
     public static void setModId(String id) {
         modId = id;
     }
     
-    private static void handleModId() {
+    public static void setGenerator(RecipeGenerator recipeGenerator) {
+        generator = recipeGenerator;
+    }
+    
+    public static void setWrapperLookup(RegistryWrapper.WrapperLookup wrapperLookup) {
+        lookup = wrapperLookup;
+    }
+    
+    private static void handleModRecipes() {
         if(modId == null) {
-            throw new MissingValueException("Missing Mod ID! Please make sure to define it!");
+            throw new MissingValueException("Missing Mod ID! Please make sure to set it!");
+        }
+        if(generator == null) {
+            throw new MissingValueException("Missing Recipe Generator! Please make sure to set it!");
         }
     }
+    
+    private static void handleWrapper() {
+        if(lookup == null) {
+            throw new MissingValueException("Missing Wrapper Lookup! Please make sure to set it!");
+        }
+    }
+    
 
     public static class ToolRecipes {
         private ToolRecipes() {}
         
-        public static void offerSwordRecipe(ItemConvertible output, Item input, RecipeExporter exporter) {
+        public void offerSwordRecipe(ItemConvertible output, Item input, RecipeExporter exporter) {
             offerSwordRecipe(output, input, 1, exporter);
         }
         
@@ -40,15 +63,15 @@ public class ExtRecipes {
             return createSwordRecipe(output, input, 1);
         }
         
-        public static void offerSwordRecipe(ItemConvertible output, Item input, Integer count, RecipeExporter exporter) {
-            handleModId();
+        public void offerSwordRecipe(ItemConvertible output, Item input, Integer count, RecipeExporter exporter) {
+            handleModRecipes();
             createSwordRecipe(output, Ingredient.ofItems(input), count)
-                    .criterion(RecipeProvider.hasItem(input), RecipeProvider.conditionsFromItem(input))
-                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+                    .criterion(RecipeGenerator.hasItem(input), generator.conditionsFromItem(input))
+                    .offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of(modId, output.toString())));
         }
 
         public static CraftingRecipeJsonBuilder createSwordRecipe(ItemConvertible output, Ingredient input, Integer count) {
-           return ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, output, count)
+           return ShapedRecipeJsonBuilder.create(lookup.getOrThrow(RegistryKeys.ITEM),RecipeCategory.MISC, output, count)
                    .pattern("i").pattern("i").pattern("s")
                    .input('i', input).input('s', Items.STICK);
        }
@@ -62,14 +85,14 @@ public class ExtRecipes {
         }
         
         public static void offerPickaxeRecipe(ItemConvertible output, Item input, Integer count, RecipeExporter exporter) {
-            handleModId();
+            handleModRecipes();
             createPickaxeRecipe(output, Ingredient.ofItems(input), count)
-                    .criterion(RecipeProvider.hasItem(input), RecipeProvider.conditionsFromItem(input))
-                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+                    .criterion(RecipeGenerator.hasItem(input), generator.conditionsFromItem(input))
+                    .offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of(modId, output.toString())));
         }
 
         public static CraftingRecipeJsonBuilder createPickaxeRecipe(ItemConvertible output, Ingredient input, Integer count) {
-           return ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, output, count)
+           return ShapedRecipeJsonBuilder.create(lookup.getOrThrow(RegistryKeys.ITEM),RecipeCategory.TOOLS, output, count)
                    .pattern("iii").pattern(" s ").pattern(" s ")
                    .input('i', input).input('s', Items.STICK);
        }
@@ -83,14 +106,14 @@ public class ExtRecipes {
         }
         
         public static void offerAxeRecipe(ItemConvertible output, Item input, Integer count, RecipeExporter exporter) {
-            handleModId();
+            handleModRecipes();
             createAxeRecipe(output, Ingredient.ofItems(input), count)
-                    .criterion(RecipeProvider.hasItem(input), RecipeProvider.conditionsFromItem(input))
-                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+                    .criterion(RecipeGenerator.hasItem(input), generator.conditionsFromItem(input))
+                    .offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of(modId, output.toString())));
         }
 
         public static CraftingRecipeJsonBuilder createAxeRecipe(ItemConvertible output, Ingredient input, Integer count) {
-           return ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, output, count)
+           return ShapedRecipeJsonBuilder.create(lookup.getOrThrow(RegistryKeys.ITEM),RecipeCategory.TOOLS, output, count)
                    .pattern("ii").pattern("is").pattern(" s")
                    .input('i', input).input('s', Items.STICK);
        }
@@ -104,14 +127,14 @@ public class ExtRecipes {
         }
         
         public static void offerShovelRecipe(ItemConvertible output, Item input, Integer count, RecipeExporter exporter) {
-            handleModId();
+            handleModRecipes();
             createShovelRecipe(output, Ingredient.ofItems(input), count)
-                    .criterion(RecipeProvider.hasItem(input), RecipeProvider.conditionsFromItem(input))
-                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+                    .criterion(RecipeGenerator.hasItem(input), generator.conditionsFromItem(input))
+                    .offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of(modId, output.toString())));
         }
 
         public static CraftingRecipeJsonBuilder createShovelRecipe(ItemConvertible output, Ingredient input, Integer count) {
-           return ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, output, count)
+           return ShapedRecipeJsonBuilder.create(lookup.getOrThrow(RegistryKeys.ITEM),RecipeCategory.TOOLS, output, count)
                    .pattern("i").pattern("s").pattern("s")
                    .input('i', input).input('s', Items.STICK);
        }
@@ -125,14 +148,14 @@ public class ExtRecipes {
         }
         
         public static void offerHoeRecipe(ItemConvertible output, Item input, Integer count, RecipeExporter exporter) {
-            handleModId();
+            handleModRecipes();
             createHoeRecipe(output, Ingredient.ofItems(input), count)
-                    .criterion(RecipeProvider.hasItem(input), RecipeProvider.conditionsFromItem(input))
-                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+                    .criterion(RecipeGenerator.hasItem(input), generator.conditionsFromItem(input))
+                    .offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of(modId, output.toString())));
         }
 
         public static CraftingRecipeJsonBuilder createHoeRecipe(ItemConvertible output, Ingredient input, Integer count) {
-           return ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, output, count)
+           return ShapedRecipeJsonBuilder.create(lookup.getOrThrow(RegistryKeys.ITEM),RecipeCategory.TOOLS, output, count)
                    .pattern("ii").pattern(" s").pattern(" s")
                    .input('i', input).input('s', Items.STICK);
        }
@@ -151,14 +174,14 @@ public class ExtRecipes {
         }
         
         public static void offerHelmetRecipe(ItemConvertible output, Item input, Integer count, RecipeExporter exporter) {
-            handleModId();
+            handleModRecipes();
             createHelmetRecipe(output, Ingredient.ofItems(input), count)
-                    .criterion(RecipeProvider.hasItem(input), RecipeProvider.conditionsFromItem(input))
-                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+                    .criterion(RecipeGenerator.hasItem(input), generator.conditionsFromItem(input))
+                    .offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of(modId, output.toString())));
         }
 
         public static CraftingRecipeJsonBuilder createHelmetRecipe(ItemConvertible output, Ingredient input, Integer count) {
-            return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output, count)
+            return ShapedRecipeJsonBuilder.create(lookup.getOrThrow(RegistryKeys.ITEM),RecipeCategory.COMBAT, output, count)
                     .pattern("iii").pattern("i i")
                     .input('i', input);
         }
@@ -172,14 +195,14 @@ public class ExtRecipes {
         }
         
         public static void offerChestplateRecipe(ItemConvertible output, Item input, Integer count, RecipeExporter exporter) {
-            handleModId();
+            handleModRecipes();
             createChestplateRecipe(output, Ingredient.ofItems(input), count)
-                    .criterion(RecipeProvider.hasItem(input), RecipeProvider.conditionsFromItem(input))
-                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+                    .criterion(RecipeGenerator.hasItem(input), generator.conditionsFromItem(input))
+                    .offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of(modId, output.toString())));
         }
 
         public static CraftingRecipeJsonBuilder createChestplateRecipe(ItemConvertible output, Ingredient input, Integer count) {
-           return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output, count)
+           return ShapedRecipeJsonBuilder.create(lookup.getOrThrow(RegistryKeys.ITEM),RecipeCategory.COMBAT, output, count)
                    .pattern("i i").pattern("iii").pattern("iii")
                    .input('i', input);
        }
@@ -193,14 +216,14 @@ public class ExtRecipes {
         }
         
         public static void offerLeggingsRecipe(ItemConvertible output, Item input, Integer count, RecipeExporter exporter) {
-            handleModId();
+            handleModRecipes();
             createLeggingsRecipe(output, Ingredient.ofItems(input), count)
-                    .criterion(RecipeProvider.hasItem(input), RecipeProvider.conditionsFromItem(input))
-                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+                    .criterion(RecipeGenerator.hasItem(input), generator.conditionsFromItem(input))
+                    .offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of(modId, output.toString())));
         }
 
         public static CraftingRecipeJsonBuilder createLeggingsRecipe(ItemConvertible output, Ingredient input, Integer count) {
-           return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output, count)
+           return ShapedRecipeJsonBuilder.create(lookup.getOrThrow(RegistryKeys.ITEM),RecipeCategory.COMBAT, output, count)
                    .pattern("iii").pattern("i i").pattern("i i")
                    .input('i', input);
        }
@@ -214,14 +237,14 @@ public class ExtRecipes {
         }
         
         public static void offerBootsRecipe(ItemConvertible output, Item input, Integer count, RecipeExporter exporter) {
-            handleModId();
+            handleModRecipes();
             createBootsRecipe(output, Ingredient.ofItems(input), count)
-                    .criterion(RecipeProvider.hasItem(input), RecipeProvider.conditionsFromItem(input))
-                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+                    .criterion(RecipeGenerator.hasItem(input), generator.conditionsFromItem(input))
+                    .offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of(modId, output.toString())));
         }
 
         public static CraftingRecipeJsonBuilder createBootsRecipe(ItemConvertible output, Ingredient input, Integer count) {
-           return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output, count)
+           return ShapedRecipeJsonBuilder.create(lookup.getOrThrow(RegistryKeys.ITEM),RecipeCategory.COMBAT, output, count)
                    .pattern("i i").pattern("i i")
                    .input('i', input);
        }
@@ -235,14 +258,14 @@ public class ExtRecipes {
         }
         
         public static void offerShieldRecipe(ItemConvertible output, Item input, Integer count, RecipeExporter exporter) {
-            handleModId();
+            handleModRecipes();
             createShieldRecipe(output, Ingredient.ofItems(input), count)
-                    .criterion(RecipeProvider.hasItem(input), RecipeProvider.conditionsFromItem(input))
-                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+                    .criterion(RecipeGenerator.hasItem(input), generator.conditionsFromItem(input))
+                    .offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of(modId, output.toString())));
         }
 
         public static CraftingRecipeJsonBuilder createShieldRecipe(ItemConvertible output, Ingredient input, Integer count) {
-            return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output, count)
+            return ShapedRecipeJsonBuilder.create(lookup.getOrThrow(RegistryKeys.ITEM),RecipeCategory.COMBAT, output, count)
                     .pattern("pip").pattern("ppp").pattern(" p ")
                     .input('p', ItemTags.PLANKS).input('i', input);
        }
@@ -256,14 +279,14 @@ public class ExtRecipes {
         }
         
         public static void offerHorseArmorRecipe(ItemConvertible output, Item input, Integer count, RecipeExporter exporter) {
-            handleModId();
+            handleModRecipes();
             createHorseArmorRecipe(output, Ingredient.ofItems(input), count)
-                    .criterion(RecipeProvider.hasItem(input), RecipeProvider.conditionsFromItem(input))
-                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+                    .criterion(RecipeGenerator.hasItem(input), generator.conditionsFromItem(input))
+                    .offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of(modId, output.toString())));
         }
 
         public static CraftingRecipeJsonBuilder createHorseArmorRecipe(ItemConvertible output, Ingredient input, Integer count) {
-            return ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output, count)
+            return ShapedRecipeJsonBuilder.create(lookup.getOrThrow(RegistryKeys.ITEM),RecipeCategory.COMBAT, output, count)
                     .pattern("i i").pattern("iii").pattern("i i")
                     .input('i', input);
        }
@@ -282,14 +305,14 @@ public class ExtRecipes {
         }
         
         public static void offerItemTopRecipe(RecipeCategory category, ItemConvertible output, Item input, Item top, Integer count, RecipeExporter exporter) {
-            handleModId();
+            handleModRecipes();
             createItemTopRecipe(category, output, Ingredient.ofItems(input), Ingredient.ofItems(top), count)
-                    .criterion(RecipeProvider.hasItem(top), RecipeProvider.conditionsFromItem(top))
-                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+                    .criterion(RecipeGenerator.hasItem(top), generator.conditionsFromItem(top))
+                    .offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of(modId, output.toString())));
         }
 
         public static CraftingRecipeJsonBuilder createItemTopRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient top, Integer count) {
-            return ShapedRecipeJsonBuilder.create(category, output, count)
+            return ShapedRecipeJsonBuilder.create(lookup.getOrThrow(RegistryKeys.ITEM),category, output, count)
                     .pattern("iti").pattern("iii").pattern("iii")
                     .input('i', input).input('t', top);
         }
@@ -303,14 +326,14 @@ public class ExtRecipes {
         }
         
         public static void offerSurroundingRecipe(RecipeCategory category, ItemConvertible output, Item outside, Item inside, Integer count, RecipeExporter exporter) {
-            handleModId();
+            handleModRecipes();
             createSurroundingRecipe(category, output, Ingredient.ofItems(outside), Ingredient.ofItems(inside), count)
-                    .criterion(RecipeProvider.hasItem(inside), RecipeProvider.conditionsFromItem(inside))
-                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+                    .criterion(RecipeGenerator.hasItem(inside), generator.conditionsFromItem(inside))
+                    .offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of(modId, output.toString())));
         }
 
         public static CraftingRecipeJsonBuilder createSurroundingRecipe(RecipeCategory category, ItemConvertible output, Ingredient outside, Ingredient inside, Integer count) {
-            return ShapedRecipeJsonBuilder.create(category, output, count)
+            return ShapedRecipeJsonBuilder.create(lookup.getOrThrow(RegistryKeys.ITEM),category, output, count)
                     .pattern("ooo").pattern("oio").pattern("ooo")
                     .input('o', outside).input('i', inside);
         }
@@ -340,14 +363,14 @@ public class ExtRecipes {
         }
         
         public static void offerItemBottomRecipe(RecipeCategory category, ItemConvertible output, Item input, Item bottom, Integer count, RecipeExporter exporter) {
-            handleModId();
+            handleModRecipes();
             createSurroundingRecipe(category, output, Ingredient.ofItems(input), Ingredient.ofItems(bottom), count)
-                    .criterion(RecipeProvider.hasItem(bottom), RecipeProvider.conditionsFromItem(bottom))
-                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+                    .criterion(RecipeGenerator.hasItem(bottom), generator.conditionsFromItem(bottom))
+                    .offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of(modId, output.toString())));
         }
 
         public static CraftingRecipeJsonBuilder createItemBottomRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient bottom, Integer count) {
-            return ShapedRecipeJsonBuilder.create(category, output, count)
+            return ShapedRecipeJsonBuilder.create(lookup.getOrThrow(RegistryKeys.ITEM),category, output, count)
                     .pattern("iii").pattern("iii").pattern("ibi")
                     .input('i', input).input('b', bottom);
         }
@@ -365,14 +388,14 @@ public class ExtRecipes {
         }
         
         public static void offerTopLineRecipe(RecipeCategory category, ItemConvertible output, Item input, Item line, Integer count, RecipeExporter exporter) {
-            handleModId();
+            handleModRecipes();
             createTopLineRecipe(category, output, Ingredient.ofItems(input), Ingredient.ofItems(line), count)
-                    .criterion(RecipeProvider.hasItem(line), RecipeProvider.conditionsFromItem(line))
-                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+                    .criterion(RecipeGenerator.hasItem(line), generator.conditionsFromItem(line))
+                    .offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of(modId, output.toString())));
         }
 
         public static CraftingRecipeJsonBuilder createTopLineRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient line, Integer count) {
-            return ShapedRecipeJsonBuilder.create(category, output, count)
+            return ShapedRecipeJsonBuilder.create(lookup.getOrThrow(RegistryKeys.ITEM),category, output, count)
                     .pattern("lll").pattern("iii").pattern("iii")
                     .input('i', input).input('l', line);
         }
@@ -386,14 +409,14 @@ public class ExtRecipes {
         }
         
         public static void offerMiddleLineRecipe(RecipeCategory category, ItemConvertible output, Item input, Item line, Integer count, RecipeExporter exporter) {
-            handleModId();
+            handleModRecipes();
             createMiddleLineRecipe(category, output, Ingredient.ofItems(input), Ingredient.ofItems(line), count)
-                    .criterion(RecipeProvider.hasItem(line), RecipeProvider.conditionsFromItem(line))
-                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+                    .criterion(RecipeGenerator.hasItem(line), generator.conditionsFromItem(line))
+                    .offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of(modId, output.toString())));
         }
         
         public static CraftingRecipeJsonBuilder createMiddleLineRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient line, Integer count) {
-            return ShapedRecipeJsonBuilder.create(category, output, count)
+            return ShapedRecipeJsonBuilder.create(lookup.getOrThrow(RegistryKeys.ITEM),category, output, count)
                     .pattern("iii").pattern("lll").pattern("iii")
                     .input('i', input).input('l', line);
         }
@@ -407,14 +430,14 @@ public class ExtRecipes {
         }
         
         public static void offerBottomLineRecipe(RecipeCategory category, ItemConvertible output, Item input, Item line, Integer count, RecipeExporter exporter) {
-            handleModId();
+            handleModRecipes();
             createBottomLineRecipe(category, output, Ingredient.ofItems(input), Ingredient.ofItems(line), count)
-                    .criterion(RecipeProvider.hasItem(line), RecipeProvider.conditionsFromItem(line))
-                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+                    .criterion(RecipeGenerator.hasItem(line), generator.conditionsFromItem(line))
+                    .offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of(modId, output.toString())));
         }
         
         public static CraftingRecipeJsonBuilder createBottomLineRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Ingredient line, Integer count) {
-            return ShapedRecipeJsonBuilder.create(category, output, count)
+            return ShapedRecipeJsonBuilder.create(lookup.getOrThrow(RegistryKeys.ITEM),category, output, count)
                     .pattern("iii").pattern("iii").pattern("lll")
                     .input('i', input).input('l', line);
         }
@@ -432,14 +455,14 @@ public class ExtRecipes {
         }
         
         public static void offerAirCenterRecipe(RecipeCategory category, ItemConvertible output, Item input, Integer count, RecipeExporter exporter) {
-            handleModId();
+            handleModRecipes();
             createAirCenterRecipe(category, output, Ingredient.ofItems(input), count)
-                    .criterion(RecipeProvider.hasItem(input), RecipeProvider.conditionsFromItem(input))
-                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+                    .criterion(RecipeGenerator.hasItem(input), generator.conditionsFromItem(input))
+                    .offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of(modId, output.toString())));
         }
         
         public static CraftingRecipeJsonBuilder createAirCenterRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Integer count) {
-            return ShapedRecipeJsonBuilder.create(category, output, count)
+            return ShapedRecipeJsonBuilder.create(lookup.getOrThrow(RegistryKeys.ITEM),category, output, count)
                     .pattern("iii").pattern("i i").pattern("iii")
                     .input('i', input);
         }
@@ -453,14 +476,14 @@ public class ExtRecipes {
         }
         
         public static void offerAirTopRecipe(RecipeCategory category, ItemConvertible output, Item input, Integer count, RecipeExporter exporter) {
-            handleModId();
+            handleModRecipes();
             createAirTopRecipe(category, output, Ingredient.ofItems(input), count)
-                    .criterion(RecipeProvider.hasItem(input), RecipeProvider.conditionsFromItem(input))
-                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+                    .criterion(RecipeGenerator.hasItem(input), generator.conditionsFromItem(input))
+                    .offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of(modId, output.toString())));
         }
         
         public static CraftingRecipeJsonBuilder createAirTopRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Integer count) {
-            return ShapedRecipeJsonBuilder.create(category, output, count)
+            return ShapedRecipeJsonBuilder.create(lookup.getOrThrow(RegistryKeys.ITEM),category, output, count)
                     .pattern("i i").pattern("iii").pattern("iii")
                     .input('i', input);
         }
@@ -474,14 +497,14 @@ public class ExtRecipes {
         }
         
         public static void offerAirBottomRecipe(RecipeCategory category, ItemConvertible output, Item input, Integer count, RecipeExporter exporter) {
-            handleModId();
+            handleModRecipes();
             createAirBottomRecipe(category, output, Ingredient.ofItems(input), count)
-                    .criterion(RecipeProvider.hasItem(input), RecipeProvider.conditionsFromItem(input))
-                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+                    .criterion(RecipeGenerator.hasItem(input), generator.conditionsFromItem(input))
+                    .offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of(modId, output.toString())));
         }
         
         public static CraftingRecipeJsonBuilder createAirBottomRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Integer count) {
-            return ShapedRecipeJsonBuilder.create(category, output, count)
+            return ShapedRecipeJsonBuilder.create(lookup.getOrThrow(RegistryKeys.ITEM),category, output, count)
                     .pattern("iii").pattern("iii").pattern("i i")
                     .input('i', input);
         }
@@ -499,14 +522,14 @@ public class ExtRecipes {
         }
         
         public static void offerTopLineAirRecipe(RecipeCategory category, ItemConvertible output, Item input, Integer count, RecipeExporter exporter) {
-            handleModId();
+            handleModRecipes();
             createTopLineAirRecipe(category, output, Ingredient.ofItems(input), count)
-                    .criterion(RecipeProvider.hasItem(input), RecipeProvider.conditionsFromItem(input))
-                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+                    .criterion(RecipeGenerator.hasItem(input), generator.conditionsFromItem(input))
+                    .offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of(modId, output.toString())));
         }
         
         public static CraftingRecipeJsonBuilder createTopLineAirRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Integer count) {
-            return ShapedRecipeJsonBuilder.create(category, output, count)
+            return ShapedRecipeJsonBuilder.create(lookup.getOrThrow(RegistryKeys.ITEM),category, output, count)
                     .pattern("   ").pattern("iii").pattern("iii")
                     .input('i', input);
         }
@@ -520,14 +543,14 @@ public class ExtRecipes {
         }
         
         public static void offerMiddleLineAirRecipe(RecipeCategory category, ItemConvertible output, Item input, Integer count, RecipeExporter exporter) {
-            handleModId();
+            handleModRecipes();
             createMiddleLineAirRecipe(category, output, Ingredient.ofItems(input), count)
-                    .criterion(RecipeProvider.hasItem(input), RecipeProvider.conditionsFromItem(input))
-                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+                    .criterion(RecipeGenerator.hasItem(input), generator.conditionsFromItem(input))
+                    .offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of(modId, output.toString())));
         }
         
         public static CraftingRecipeJsonBuilder createMiddleLineAirRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Integer count) {
-            return ShapedRecipeJsonBuilder.create(category, output, count)
+            return ShapedRecipeJsonBuilder.create(lookup.getOrThrow(RegistryKeys.ITEM),category, output, count)
                     .pattern("iii").pattern("   ").pattern("iii")
                     .input('i', input);
         }
@@ -541,14 +564,14 @@ public class ExtRecipes {
         }
         
         public static void offerBottomLineAirRecipe(RecipeCategory category, ItemConvertible output, Item input, Integer count, RecipeExporter exporter) {
-            handleModId();
+            handleModRecipes();
             createBottomLineAirRecipe(category, output, Ingredient.ofItems(input), count)
-                    .criterion(RecipeProvider.hasItem(input), RecipeProvider.conditionsFromItem(input))
-                    .offerTo(exporter, Identifier.of(modId, output.toString()));
+                    .criterion(RecipeGenerator.hasItem(input), generator.conditionsFromItem(input))
+                    .offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of(modId, output.toString())));
         }
         
         public static CraftingRecipeJsonBuilder createBottomLineAirRecipe(RecipeCategory category, ItemConvertible output, Ingredient input, Integer count) {
-            return ShapedRecipeJsonBuilder.create(category, output, count)
+            return ShapedRecipeJsonBuilder.create(lookup.getOrThrow(RegistryKeys.ITEM),category, output, count)
                     .pattern("iii").pattern("iii").pattern("   ")
                     .input('i', input);
         }

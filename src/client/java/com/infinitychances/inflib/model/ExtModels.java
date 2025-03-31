@@ -2,7 +2,9 @@ package com.infinitychances.inflib.model;
 
 import com.infinitychances.inflib.InfLib;
 import net.minecraft.block.Block;
-import net.minecraft.data.client.*;
+import net.minecraft.client.data.BlockStateModelGenerator;
+import net.minecraft.client.data.TextureMap;
+import net.minecraft.client.data.*;
 import net.minecraft.util.Identifier;
 
 public class ExtModels {
