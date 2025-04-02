@@ -1,6 +1,7 @@
 package com.infinitychances.inflib.util.block;
 
 import com.infinitychances.inflib.InfLib;
+import static com.infinitychances.inflib.util.ANSIColors.*;
 
 import java.util.HashMap;
 import static com.infinitychances.inflib.util.ReservedStuffManager.*;
@@ -10,6 +11,20 @@ public class TrailMap<T> {
     private HashMap<String, Integer> holdMap = new HashMap<>();
     
     public TrailMap() {}
+    
+    private static String keyValue(String key, Boolean addColors) {
+        if(!addColors) {
+            StringBuilder string = new StringBuilder();
+            return string.append("KEY: ").append(key).append(";")
+                    .append(" VALUES: ")
+                    .toString();
+        } else {
+            StringBuilder string = new StringBuilder();
+            return string.append(WHITE_BOLD + getAnsiBackground(72, 161, 69) + "KEY:" + RESET + " ").append(key).append(";")
+                    .append(" " + WHITE_BOLD + getAnsiBackground(61, 85, 120) + "VALUES:" + RESET + " ")
+                    .toString();
+        }
+    }
     
     //Do not map empty ArrayLists, HashMaps, Maps, etc...
     @SafeVarargs
@@ -181,7 +196,25 @@ public class TrailMap<T> {
         StringBuilder string = new StringBuilder();
         for(String key : holdMap.keySet()) {
             Integer count = holdMap.get(key);
-            string.append("Key: ").append(key).append(";").append(" Values: ");
+            string.append(keyValue(key, false));
+            for(int i = 0; i < count; i++) {
+                String item = map.get(tokenize(key, i)).toString();
+                string.append(item);
+                if(i != count - 1) {
+                    string.append(", ");
+                } else {
+                    string.append("; ");
+                }
+            }
+        }
+        return string.toString();
+    }
+    
+    public String toString(Boolean addColors) {
+        StringBuilder string = new StringBuilder();
+        for(String key : holdMap.keySet()) {
+            Integer count = holdMap.get(key);
+            string.append(keyValue(key, true));
             for(int i = 0; i < count; i++) {
                 String item = map.get(tokenize(key, i)).toString();
                 string.append(item);
@@ -199,14 +232,22 @@ public class TrailMap<T> {
         InfLib.LOGGER.info(this.toString());
     }
     
+    public void print(Boolean addColors) {
+        InfLib.LOGGER.info(this.toString(addColors));
+    }
+    
     public void printKey(String key) {
+        printKey(key, false);
+    }
+    
+    public void printKey(String key, Boolean addColors) {
         if(!map.containsKey(tokenize(key))) {
             throw new IllegalArgumentException("Key does not exist!");
         }
         //basically just the toString method.
         StringBuilder string = new StringBuilder();
         Integer count = holdMap.get(key);
-        string.append("Key: ").append(key).append(";").append(" Values: ");
+        string.append(keyValue(key, addColors));
         for(int i = 0; i < count; i++) {
             String item = map.get(tokenize(key, i)).toString();
             string.append(item);
