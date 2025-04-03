@@ -6,11 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class ReservedStuffManager {
-    private ReservedStuffManager() {
-
-    }
-
-    //private static final ReservedStuffManager INSTANCE = new ReservedStuffManager();
+    private ReservedStuffManager() {}
 
     public static final String SPLIT_CHAR = "≈";
 

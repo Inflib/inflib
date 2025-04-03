@@ -20,8 +20,8 @@ public class TrailMap<T> {
                     .toString();
         } else {
             StringBuilder string = new StringBuilder();
-            return string.append(WHITE_BOLD + getAnsiBackground(72, 161, 69) + "KEY:" + RESET + " ").append(key).append(";")
-                    .append(" " + WHITE_BOLD + getAnsiBackground(61, 85, 120) + "VALUES:" + RESET + " ")
+            return string.append(WHITE_BOLD + addAnsiBackground(72, 161, 69) + "KEY:" + RESET + " ").append(key).append(";")
+                    .append(" " + WHITE_BOLD + addAnsiBackground(61, 85, 120) + "VALUES:" + RESET + " ")
                     .toString();
         }
     }

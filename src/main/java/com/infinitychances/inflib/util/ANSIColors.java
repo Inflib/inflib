@@ -3,6 +3,8 @@ package com.infinitychances.inflib.util;
 import java.util.HashMap;
 
 public final class ANSIColors {
+    private ANSIColors() {}
+    
     private static final HashMap <String, String> backgrounds = new HashMap<>();
     private static final HashMap <String, String> texts = new HashMap<>();
     
@@ -14,33 +16,41 @@ public final class ANSIColors {
         return backgrounds;
     }
     
-    public static String getAnsiBackground(int r, int g, int b) {
+    public static String getAnsiBackground(String name) {
+        return backgrounds.get(name);
+    }
+    
+    public static String getAnsiText(String name) {
+        return texts.get(name);
+    }
+    
+    public static String addAnsiBackground(int r, int g, int b) {
         return "\u001b[48;2;" + r + ";" + g + ";" + b + "m";
     }
     
-    public static String getAnsiBackground(int r, int g, int b, String name) {
-        String result = getAnsiBackground(r, g, b);
+    public static String addAnsiBackground(int r, int g, int b, String name) {
+        String result = addAnsiBackground(r, g, b);
         backgrounds.put(name, result);
         return result;
     }
     
-    public static String getAnsiText(int r, int g, int b) {
+    public static String addAnsiText(int r, int g, int b) {
         return "\u001b[38;2;" + r + ";" + g + ";" + b + "m";
     }
     
-    public static String getAnsiText(int r, int g, int b, String name) {
-        String result = getAnsiText(r, g, b);
+    public static String addAnsiText(int r, int g, int b, String name) {
+        String result = addAnsiText(r, g, b);
         texts.put(name, result);
         return result;
     }
     
-    public static String getBoldText(int r, int g, int b) {
-        return BOLD + getAnsiText(r, g, b);
+    public static String addBoldText(int r, int g, int b) {
+        return BOLD + addAnsiText(r, g, b);
     }
     
     //adds _bold
-    public static String getBoldText(int r, int g, int b, String name) {
-        String result = BOLD + getAnsiText(r, g, b);
+    public static String addBoldText(int r, int g, int b, String name) {
+        String result = BOLD + addAnsiText(r, g, b);
         texts.put(name+"_bold" ,result);
         return result;
     }
@@ -92,9 +102,10 @@ public final class ANSIColors {
     
     public static final String ERROR = WHITE_BOLD + RED_BACKGROUND;
     public static final String WARN = WHITE_BOLD + ORANGE_BACKGROUND;
-    public static final String INFO = WHITE_BOLD + getAnsiBackground(45, 160, 41, "infoGreen");
+    public static final String INFO = WHITE_BOLD + addAnsiBackground(45, 160, 41, "infoGreen");
     
     public static final String ALT_ERROR = RED_BOLD;
     public static final String ALT_WARN = ORANGE_BOLD;
-    public static final String ALT_INFO = getAnsiText(45, 160, 41, "infoGreen") + BOLD;
+    public static final String ALT_INFO = addAnsiText(45, 160, 41, "infoGreen") + BOLD;
+    
 }
