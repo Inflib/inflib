@@ -14,15 +14,10 @@ public class TrailMap<T> {
     
     private static String keyValue(String key, Boolean addColors) {
         if(!addColors) {
-            StringBuilder string = new StringBuilder();
-            return string.append("KEY: ").append(key).append(";")
-                    .append(" VALUES: ")
-                    .toString();
+            return "KEY: " + key + ";" + " VALUES: ";
         } else {
-            StringBuilder string = new StringBuilder();
-            return string.append(WHITE_BOLD + addAnsiBackground(72, 161, 69) + "KEY:" + RESET + " ").append(key).append(";")
-                    .append(" " + WHITE_BOLD + addAnsiBackground(61, 85, 120) + "VALUES:" + RESET + " ")
-                    .toString();
+            return WHITE_BOLD + addAnsiBackground(72, 161, 69) + "KEY:" + RESET + " " + key + ";" +
+                    " " + WHITE_BOLD + addAnsiBackground(61, 85, 120) + "VALUES:" + RESET + " ";
         }
     }
     

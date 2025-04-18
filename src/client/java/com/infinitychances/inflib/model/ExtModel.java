@@ -11,10 +11,7 @@ import net.minecraft.client.data.TextureMap;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 
 
 public class ExtModel{
@@ -173,7 +170,7 @@ public class ExtModel{
     }
 
     protected static String decodeId(String id) {
-        return Base64.getDecoder().decode(id).toString();
+        return Arrays.toString(Base64.getDecoder().decode(id));
     }
 
     public void createBlockModel(Block block, TextureMap textures, BlockStateModelGenerator blockStateModelGenerator, String modId) {

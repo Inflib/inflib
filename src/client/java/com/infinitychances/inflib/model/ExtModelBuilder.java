@@ -53,24 +53,20 @@ public class ExtModelBuilder {
 
     public ExtModel build() {
         if(this.name == null || this.type == null || this.requiredKeys == null) {
-            throw new RuntimeException("Need more information about EXT MODEL");
+            throw new RuntimeException("Need more information about the ExtModel");
         }
         if(this.variant == null) {
-            switch(this.modOrigin) {
-                case null:
-                    InfLib.LOGGER.warn("Model being made has namespace of 'minecraft', model may not function properly!");
-                    return ExtModel.of(this.type, this.name, this.requiredKeys);
-                default:
-                    return ExtModel.of(this.modOrigin, this.type, this.name, this.requiredKeys);
+            if (this.modOrigin == null) {
+                InfLib.LOGGER.warn("Model being made has namespace of 'minecraft', model may not function properly!");
+                return ExtModel.of(this.type, this.name, this.requiredKeys);
             }
+            return ExtModel.of(this.modOrigin, this.type, this.name, this.requiredKeys);
         } else {
-            switch(this.modOrigin) {
-               case null:
-                   InfLib.LOGGER.warn("Model being made has namespace of 'minecraft', model may not function properly!");
-                   return ExtModel.of(this.type, this.name, this.variant, this.requiredKeys);
-               default:
-                   return ExtModel.of(this.modOrigin, this.type, this.name, this.variant, this.requiredKeys);
-           }
+            if (this.modOrigin == null) {
+                InfLib.LOGGER.warn("Model being made has namespace of 'minecraft', model may not function properly!");
+                return ExtModel.of(this.type, this.name, this.variant, this.requiredKeys);
+            }
+            return ExtModel.of(this.modOrigin, this.type, this.name, this.variant, this.requiredKeys);
         }
     }
 
