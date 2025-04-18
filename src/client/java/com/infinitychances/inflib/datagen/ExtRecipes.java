@@ -160,6 +160,27 @@ public class ExtRecipes {
                    .input('i', input).input('s', Items.STICK);
        }
 
+        public static void offerBowRecipe(ItemConvertible output, Item input, RecipeExporter exporter) {
+            offerBowRecipe(output, input, 1, exporter);
+        }
+
+        public static CraftingRecipeJsonBuilder createBowRecipe(ItemConvertible output, Ingredient input) {
+            return createBowRecipe(output, input, 1);
+        }
+
+        public static void offerBowRecipe(ItemConvertible output, Item input, Integer count, RecipeExporter exporter) {
+            handleModRecipes();
+            createHoeRecipe(output, Ingredient.ofItems(input), count)
+                    .criterion(RecipeGenerator.hasItem(input), generator.conditionsFromItem(input))
+                    .offerTo(exporter, RegistryKey.of(RegistryKeys.RECIPE, Identifier.of(modId, output.toString())));
+        }
+
+        public static CraftingRecipeJsonBuilder createBowRecipe(ItemConvertible output, Ingredient input, Integer count) {
+            return ShapedRecipeJsonBuilder.create(lookup.getOrThrow(RegistryKeys.ITEM),RecipeCategory.TOOLS, output, count)
+                    .pattern(" is").pattern("i s").pattern(" is")
+                    .input('i', input).input('s', Items.STRING);
+        }
+
    }
 
     public static class ArmorRecipes {
