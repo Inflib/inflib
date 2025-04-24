@@ -3,7 +3,7 @@
 	"id": "inflib",
 	"version": "${version}",
 	"name": "InfLib",
-	"description": "Library containing useful methods and classes made to speed up moddding!",
+	"description": "Library containing useful methods and classes made to speed up modding!",
 	"authors": [
 		"Infinitychances"
 	],
