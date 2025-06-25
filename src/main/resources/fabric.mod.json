@@ -12,7 +12,7 @@
 		"sources": "https://github.com/Infinitychances/inflib"
 	},
 	"license": "MIT",
-	"icon": "assets/inflib/inflibIcon.png",
+	"icon": "assets/inflib/inflib_square.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [

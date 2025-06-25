@@ -1,7 +1,9 @@
 package com.infinitychances.inflib.util.block;
 
 import com.infinitychances.inflib.InfLib;
-import static com.infinitychances.inflib.util.ANSIColors.*;
+import com.infinitychances.inflib.util.ansi.ANSIColor;
+
+import static com.infinitychances.inflib.util.ansi.ANSIColors.*;
 
 import java.util.HashMap;
 import static com.infinitychances.inflib.util.ReservedStuffManager.*;
@@ -16,8 +18,8 @@ public class TrailMap<T> {
         if(!addColors) {
             return "KEY: " + key + ";" + " VALUES: ";
         } else {
-            return WHITE_BOLD + addAnsiBackground(72, 161, 69) + "KEY:" + RESET + " " + key + ";" +
-                    " " + WHITE_BOLD + addAnsiBackground(61, 85, 120) + "VALUES:" + RESET + " ";
+            return new ANSIColor(72, 161, 69).addBold().toString() + "KEY:" + RESET + " " + key + ";" +
+                    " " + new ANSIColor(66, 90, 125).addBold().toString() + "VALUES:" + RESET + " ";
         }
     }
     
