@@ -1,6 +1,9 @@
 package com.infinitychances.inflib.util.block;
 
 import com.infinitychances.inflib.InfLib;
+import com.infinitychances.inflib.util.ansi.ANSIColor;
+
+import static com.infinitychances.inflib.util.ansi.ANSIColors.*;
 
 import java.util.HashMap;
 import static com.infinitychances.inflib.util.ReservedStuffManager.*;
@@ -11,13 +14,20 @@ public class TrailMap<T> {
     
     public TrailMap() {}
     
+    private static String keyValue(String key, Boolean addColors) {
+        if(!addColors) {
+            return "KEY: " + key + ";" + " VALUES: ";
+        } else {
+            return new ANSIColor(72, 161, 69).addBold().toString() + "KEY:" + RESET + " " + key + ";" +
+                    " " + new ANSIColor(66, 90, 125).addBold().toString() + "VALUES:" + RESET + " ";
+        }
+    }
+    
     //Do not map empty ArrayLists, HashMaps, Maps, etc...
     @SafeVarargs
     public final TrailMap<T> map(String key, T... listOrder) {
-        if(holdMap != null) {
-            if(holdMap.containsKey(key)) {
-                throw new IllegalArgumentException("Key cannot be the same as another one!");
-            }
+        if(holdMap != null && holdMap.containsKey(key)) {
+            throw new IllegalArgumentException("Key cannot be the same as another one!");
         }
         if(isReserved(key) || hasNumber(key)) {
             throw new IllegalArgumentException("Key cannot contain a reserved character or a number!");
@@ -55,7 +65,7 @@ public class TrailMap<T> {
     }
     
     public void replaceFromIndex(String key, Integer index, T item) {
-        if(!map.containsKey(tokenize(key))) {
+        if(!holdMap.containsKey(key)) {
             throw new IllegalArgumentException("Key does not exist!");
         }
         if(!map.containsKey(tokenize(key, index))) {
@@ -65,7 +75,7 @@ public class TrailMap<T> {
     }
 
     public T getNextFromIndex(String key, Integer index) {
-        if(!map.containsKey(tokenize(key))) {
+        if(!holdMap.containsKey(key)) {
             throw new IllegalArgumentException("Key does not exist!");
         }
         return map.get(tokenize(key, index+1));
@@ -75,7 +85,7 @@ public class TrailMap<T> {
         if(item == null) {
             throw new IllegalArgumentException("Item cannot be null!");
         }
-        if(!map.containsKey(tokenize(key))) {
+        if(!holdMap.containsKey(key)) {
             throw new IllegalArgumentException("Key does not exist!");
         } else if (!map.containsValue(item)) {
             throw new IllegalArgumentException("Value does not exist!");
@@ -92,7 +102,7 @@ public class TrailMap<T> {
     }
     
     public T getPreviousFromIndex(String key, Integer index) {
-        if(!map.containsKey(tokenize(key))) {
+        if(!holdMap.containsKey(key)) {
             throw new IllegalArgumentException("Key does not exist!");
         }
         return index < 1 ? null : map.get(tokenize(key, index-1));
@@ -102,7 +112,7 @@ public class TrailMap<T> {
         if(item == null) {
             throw new IllegalArgumentException("Item cannot be null!");
         }
-        if(!map.containsKey(tokenize(key))) {
+        if(!holdMap.containsKey(key)) {
             throw new IllegalArgumentException("Key does not exist!");
         } else if (!map.containsValue(item)) {
             throw new IllegalArgumentException("Value does not exist!");
@@ -119,7 +129,7 @@ public class TrailMap<T> {
     }
     
     public void addToEnd(String key, T item) {
-        if(!map.containsKey(tokenize(key))) {
+        if(!holdMap.containsKey(key)) {
             throw new IllegalArgumentException("Key does not exist!");
         }
         Integer index = holdMap.get(key);
@@ -128,7 +138,7 @@ public class TrailMap<T> {
     }
     
     public void insert(String key, Integer index, T item) {
-        if(!map.containsKey(tokenize(key))) {
+        if(!holdMap.containsKey(key)) {
             throw new IllegalArgumentException("Key does not exist!");
         }
         index = Math.clamp(index, 0, holdMap.get(key));
@@ -181,7 +191,25 @@ public class TrailMap<T> {
         StringBuilder string = new StringBuilder();
         for(String key : holdMap.keySet()) {
             Integer count = holdMap.get(key);
-            string.append("Key: ").append(key).append(";").append(" Values: ");
+            string.append(keyValue(key, false));
+            for(int i = 0; i < count; i++) {
+                String item = map.get(tokenize(key, i)).toString();
+                string.append(item);
+                if(i != count - 1) {
+                    string.append(", ");
+                } else {
+                    string.append("; ");
+                }
+            }
+        }
+        return string.toString();
+    }
+    
+    public String toString(Boolean addColors) {
+        StringBuilder string = new StringBuilder();
+        for(String key : holdMap.keySet()) {
+            Integer count = holdMap.get(key);
+            string.append(keyValue(key, true));
             for(int i = 0; i < count; i++) {
                 String item = map.get(tokenize(key, i)).toString();
                 string.append(item);
@@ -199,14 +227,22 @@ public class TrailMap<T> {
         InfLib.LOGGER.info(this.toString());
     }
     
+    public void print(Boolean addColors) {
+        InfLib.LOGGER.info(this.toString(addColors));
+    }
+    
     public void printKey(String key) {
-        if(!map.containsKey(tokenize(key))) {
+        printKey(key, false);
+    }
+    
+    public void printKey(String key, Boolean addColors) {
+        if(!holdMap.containsKey(key)) {
             throw new IllegalArgumentException("Key does not exist!");
         }
         //basically just the toString method.
         StringBuilder string = new StringBuilder();
         Integer count = holdMap.get(key);
-        string.append("Key: ").append(key).append(";").append(" Values: ");
+        string.append(keyValue(key, addColors));
         for(int i = 0; i < count; i++) {
             String item = map.get(tokenize(key, i)).toString();
             string.append(item);

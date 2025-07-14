@@ -1,7 +1,7 @@
 package com.infinitychances.inflib.model;
 
 import com.infinitychances.inflib.InfLib;
-import net.minecraft.data.client.TextureKey;
+import net.minecraft.client.data.TextureKey;
 
 //this was mostly made as a proof of concept for future builders, but it may get a use one day.
 public class ExtModelBuilder {
@@ -53,24 +53,20 @@ public class ExtModelBuilder {
 
     public ExtModel build() {
         if(this.name == null || this.type == null || this.requiredKeys == null) {
-            throw new RuntimeException("Need more information about EXT MODEL");
+            throw new RuntimeException("Need more information about the ExtModel");
         }
         if(this.variant == null) {
-            switch(this.modOrigin) {
-                case null:
-                    InfLib.LOGGER.warn("Model being made has namespace of 'minecraft', model may not function properly!");
-                    return ExtModel.of(this.type, this.name, this.requiredKeys);
-                default:
-                    return ExtModel.of(this.modOrigin, this.type, this.name, this.requiredKeys);
+            if (this.modOrigin == null) {
+                InfLib.LOGGER.warn("Model being made has namespace of 'minecraft', model may not function properly!");
+                return ExtModel.of(this.type, this.name, this.requiredKeys);
             }
+            return ExtModel.of(this.modOrigin, this.type, this.name, this.requiredKeys);
         } else {
-            switch(this.modOrigin) {
-               case null:
-                   InfLib.LOGGER.warn("Model being made has namespace of 'minecraft', model may not function properly!");
-                   return ExtModel.of(this.type, this.name, this.variant, this.requiredKeys);
-               default:
-                   return ExtModel.of(this.modOrigin, this.type, this.name, this.variant, this.requiredKeys);
-           }
+            if (this.modOrigin == null) {
+                InfLib.LOGGER.warn("Model being made has namespace of 'minecraft', model may not function properly!");
+                return ExtModel.of(this.type, this.name, this.variant, this.requiredKeys);
+            }
+            return ExtModel.of(this.modOrigin, this.type, this.name, this.variant, this.requiredKeys);
         }
     }
 

@@ -3,7 +3,7 @@
 	"id": "inflib",
 	"version": "${version}",
 	"name": "InfLib",
-	"description": "Library containing useful methods and classes made to speed up moddding!",
+	"description": "Library containing useful methods and classes made to speed up modding!",
 	"authors": [
 		"Infinitychances"
 	],
@@ -12,7 +12,7 @@
 		"sources": "https://github.com/Infinitychances/inflib"
 	},
 	"license": "MIT",
-	"icon": "assets/inflib/inflibIcon.png",
+	"icon": "assets/inflib/inflib_square.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
@@ -31,7 +31,7 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.16.10",
-		"minecraft": "~1.21.1",
+		"minecraft": "~1.21.5",
 		"java": ">=21",
 		"fabric-api": "*"
 	},
