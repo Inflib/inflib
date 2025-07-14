@@ -2,8 +2,8 @@ package com.infinitychances.inflib.util;
 
 import com.infinitychances.inflib.InfLib;
 
-public final class MainUtils {
-    private MainUtils() {
+public final class TestUtils {
+    private TestUtils() {
     
     }
     
