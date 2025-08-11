@@ -3,6 +3,7 @@
   "package": "com.infinitychances.inflib.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "SheepShearMixin"
   ],
   "injectors": {
     "defaultRequire": 1
