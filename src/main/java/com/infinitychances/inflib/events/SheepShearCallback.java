@@ -23,12 +23,12 @@ public interface SheepShearCallback {
 
     /**
      * Callback for shearing a sheep.
-     * Called before the sheep is sheared, items are dropped, and items are damaged.
+     * Called before the sheep is sheared, sound is played, items are dropped, and items are damaged.
      * @param player the player causing the callback
      * @param sheep the sheep that is being interacted with
      * @apiNote {@code ActionResult.SUCCESS} cancels further processing and continues with normal shearing behavior.<br>
      * {@code ActionResult.PASS} falls back to further processing and defaults to SUCCESS if no other listeners are available<br>
-     * {@code ActionResult.FAIL} cancels further processing and does not shear the sheep.
+     * {@code ActionResult.FAIL} cancels further processing and does not shear the sheep (unless manually done inside listeners).
      */
     ActionResult interact(PlayerEntity player, SheepEntity sheep);
 }
