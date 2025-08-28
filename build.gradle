@@ -4,6 +4,8 @@ plugins {
 }
 
 version = project.mod_version
+minecraft_version = project.minecraft_version
+fabric_version = project.fabric_version
 group = project.maven_group
 
 base {
@@ -57,9 +59,13 @@ test {
 
 processResources {
 	inputs.property "version", project.version
-
+    inputs.property "minecraft", minecraft_version
+    inputs.property "fabric_api", fabric_version
+    def map = ["version": project.version,
+                "minecraft": minecraft_version,
+                "fabric_api": fabric_version]
 	filesMatching("fabric.mod.json") {
-		expand "version": project.version
+		expand map
 	}
 }
 
@@ -87,9 +93,13 @@ jar {
 publishing {
 	publications {
 		create("mavenJava", MavenPublication) {
-			artifactId = project.archives_base_name
+            groupId = project.maven_group
+            artifactId = project.archives_base_name
+            version = project.mod_version
 			from components.java
 		}
+
+
 	}
 
 	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.

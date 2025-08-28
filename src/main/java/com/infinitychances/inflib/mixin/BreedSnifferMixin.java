@@ -26,8 +26,8 @@ public class BreedSnifferMixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/SnifferEntity;breed(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/passive/AnimalEntity;Lnet/minecraft/entity/passive/PassiveEntity;)V"),
     cancellable = true)
     private void onBreed(final ServerWorld world, final AnimalEntity other, final CallbackInfo ci, @Local LocalRef<ItemEntity> itemEntity) {
-        var inst = (SnifferEntity) (Object) this;
-        var player = Optional.ofNullable(inst.getLovingPlayer()).or(() -> Optional.ofNullable(other.getLovingPlayer())).orElse((ServerPlayerEntity) world.getClosestPlayer(inst, 10));
+        SnifferEntity inst = (SnifferEntity) (Object) this;
+        ServerPlayerEntity player = Optional.ofNullable(inst.getLovingPlayer()).or(() -> Optional.ofNullable(other.getLovingPlayer())).orElse((ServerPlayerEntity) world.getClosestPlayer(inst, 10));
         ActionResult result = BreedSnifferCallback.EVENT.invoker().interact(player,inst, (SnifferEntity) other, itemEntity.get());
 
         if(result == ActionResult.FAIL) {

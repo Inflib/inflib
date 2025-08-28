@@ -21,8 +21,8 @@ public class BreedFrogMixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/FrogEntity;breed(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/passive/AnimalEntity;Lnet/minecraft/entity/passive/PassiveEntity;)V"),
     cancellable = true)
     private void onBreed(final ServerWorld world, final AnimalEntity other, final CallbackInfo ci) {
-        var inst = (FrogEntity) (Object) this;
-        var player = Optional.ofNullable(inst.getLovingPlayer()).or(() -> Optional.ofNullable(other.getLovingPlayer())).orElse((ServerPlayerEntity) world.getClosestPlayer(inst, 10));
+        FrogEntity inst = (FrogEntity) (Object) this;
+        ServerPlayerEntity player = Optional.ofNullable(inst.getLovingPlayer()).or(() -> Optional.ofNullable(other.getLovingPlayer())).orElse((ServerPlayerEntity) world.getClosestPlayer(inst, 10));
         ActionResult result = BreedFrogCallback.EVENT.invoker().interact(player,inst, (FrogEntity) other);
 
         if(result == ActionResult.FAIL) {
