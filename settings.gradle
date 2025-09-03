@@ -7,8 +7,8 @@ pluginManagement {
         }
         gradlePluginPortal()
         maven {
-            name "kikugieMavenSnapshots"
-            url "https://maven.kikugie.dev/snapshots"
+            name = "kikugieMavenSnapshots"
+            url = "https://maven.kikugie.dev/snapshots"
         }
     }
 }

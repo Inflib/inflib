@@ -3,7 +3,7 @@ plugins {
 	id 'maven-publish'
 }
 
-version = project.mod_version
+version = project.mod_version + "+" +project.minecraft_version
 minecraft_version = project.minecraft_version
 fabric_version = project.fabric_version
 group = project.maven_group
@@ -85,7 +85,7 @@ java {
 
 jar {
 	from("LICENSE") {
-		rename { "${it}_${project.base.archivesName.get()}"}
+		rename { "${it}_${project.base.archivesName.get()}" }
 	}
 }
 
