@@ -25,7 +25,7 @@ public interface BreedAnimalCallback {
 
     /**
      * Callback for breeding animals.
-     * Called before
+     *
      *
      * @param player the player causing the callback, or the player nearest to the animals breeding
      * @param animal the animal being bred
