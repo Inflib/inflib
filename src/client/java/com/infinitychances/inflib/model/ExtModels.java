@@ -8,7 +8,7 @@ import net.minecraft.client.data.TextureMap;
 import net.minecraft.client.data.*;
 import net.minecraft.util.Identifier;
 
-public class ExtModels {
+public final class ExtModels {
 
     //creates a custom block model with corresponding item model. Mod id defaults to minecraft.
     public static void createBlockModel(ExtModel extModel, Block block, TextureMap textures, BlockStateModelGenerator blockStateModelGenerator, String modId) {

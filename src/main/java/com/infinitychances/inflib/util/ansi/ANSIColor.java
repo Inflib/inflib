@@ -2,7 +2,7 @@ package com.infinitychances.inflib.util.ansi;
 
 import com.infinitychances.inflib.InfLib;
 
-public class ANSIColor {
+public final class ANSIColor {
     private final String code;
 
     public ANSIColor(int r, int g, int b, boolean bg) {

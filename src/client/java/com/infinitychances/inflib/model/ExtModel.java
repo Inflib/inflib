@@ -14,9 +14,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 
-public class ExtModel{
-    private static HashMap<String, ExtModel> idMap = new HashMap<>();
-    private static ArrayList<String> usedIds = new ArrayList<>();
+public final class ExtModel{
+    private static final HashMap<String, ExtModel> idMap = new HashMap<>();
+    private static final ArrayList<String> usedIds = new ArrayList<>();
 
     public Model model;
     public String path;

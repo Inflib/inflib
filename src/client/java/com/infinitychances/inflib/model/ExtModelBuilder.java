@@ -3,8 +3,10 @@ package com.infinitychances.inflib.model;
 import com.infinitychances.inflib.InfLib;
 import net.minecraft.client.data.TextureKey;
 
-//this was mostly made as a proof of concept for future builders, but it may get a use one day.
-public class ExtModelBuilder {
+/**
+ * Builder for ExtModel
+ */
+public final class ExtModelBuilder {
     private String name;
     private String variant;
     private ExtModelType type;
@@ -68,6 +70,8 @@ public class ExtModelBuilder {
             }
             return ExtModel.of(this.modOrigin, this.type, this.name, this.variant, this.requiredKeys);
         }
+
+
     }
 
 }
