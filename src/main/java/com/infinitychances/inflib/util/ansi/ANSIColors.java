@@ -3,10 +3,6 @@ package com.infinitychances.inflib.util.ansi;
 
 public final class ANSIColors {
     private ANSIColors() {}
-
-    public static String format(String string, ANSIColor[] args) {
-        return null;
-    }
     
     public static final ANSIColor RESET = new ANSIColor(1);
     public static final ANSIColor BOLD = new ANSIColor(2);
@@ -49,9 +45,9 @@ public final class ANSIColors {
     public static final ANSIColor WHITE_BACKGROUND = new ANSIColor(255, 255, 255, true);
     public static final ANSIColor WHITE_BOLD = WHITE_TEXT.addBold();
     
-    public static final String BLACK_TEXT = "\u001b[38;2;0;0;0m";
-    public static final String BLACK_BACKGROUND = "\u001b[48;2;0;0;0m";
-    public static final String BLACK_BOLD = BLACK_TEXT;//.addBold();
+    public static final ANSIColor BLACK_TEXT = new ANSIColor(0,0,0,false);
+    public static final ANSIColor BLACK_BACKGROUND = new ANSIColor(0,0,0,true);
+    public static final ANSIColor BLACK_BOLD = BLACK_TEXT.addBold();
     
     public static final ANSIColor ERROR = WHITE_BOLD.join(RED_BACKGROUND);
     public static final ANSIColor WARN = WHITE_BOLD.join(ORANGE_BACKGROUND);

@@ -5,7 +5,6 @@ import com.infinitychances.inflib.annotations.MayReturnNull;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -17,7 +16,7 @@ import static com.infinitychances.inflib.util.ReservedStuffManager.*;
  * @since v0.3.0
  */
 public class TrailMap<V> {
-    private final List<String> startIndexMap = new ArrayList<>();
+    private final List<String> keyList = new ArrayList<>();
     protected final ArrayList<ArrayList<Node<V>>> nodes = new ArrayList<>();
     private ArrayList<Node<V>> lastCheckedList = null;
     private String lastCheckedKey = null;
@@ -55,7 +54,7 @@ public class TrailMap<V> {
         if (isReserved(key)) {
             throw new IllegalArgumentException("Key must not contain any reserved characters!");
         }
-        if(!startIndexMap.contains(key)) {
+        if(!keyList.contains(key)) {
             ArrayList<Node<V>> nodes = new ArrayList<>();
             for (int i = 0; i < values.length; i++) {
                 TrailToken token = tokenize(key, i);
@@ -63,7 +62,7 @@ public class TrailMap<V> {
                 Node<V> node = new Node<>(token, value, i+1 != values.length ? tokenize(key, i+1) : TrailToken.NULL_TOKEN, i != 0 ? tokenize(key, i-1) : TrailToken.NULL_TOKEN);
                 nodes.add(node);
                 if(i == 0) {
-                    startIndexMap.add(key);
+                    keyList.add(key);
                 }
             }
             this.nodes.add(nodes);
@@ -87,7 +86,7 @@ public class TrailMap<V> {
     @SafeVarargs
     public final void insertAtBeginning(String key, V... values) {
         lastCheckedKey = null;
-        if(!startIndexMap.contains(key)) {
+        if(!keyList.contains(key)) {
             InfLib.LOGGER.warn("TRAILMAP KEY NOT FOUND: " + key + " CREATING NEW STORAGE FOR KEY.");
             map(key, values);
             return;
@@ -127,7 +126,7 @@ public class TrailMap<V> {
             insertAtBeginning(key, value);
             return;
         }
-        if(!startIndexMap.contains(key)) {
+        if(!keyList.contains(key)) {
             InfLib.LOGGER.error("NO KEY FOUND");
             throw new IllegalArgumentException("Key does not exist!");
         }
@@ -150,7 +149,7 @@ public class TrailMap<V> {
 
     @SafeVarargs
     public final void insertAtEnd(String key, V... values) {
-        if(!startIndexMap.contains(key)) {
+        if(!keyList.contains(key)) {
             InfLib.LOGGER.warn("TRAILMAP KEY NOT FOUND: " + key + " CREATING NEW STORAGE FOR KEY.");
         }
 
@@ -199,7 +198,7 @@ public class TrailMap<V> {
 
     protected Node<V> getNodeFromId(String key, Integer id) {
         TrailToken wanted = tokenize(key, id);
-        if(!startIndexMap.contains(key)) throw new IllegalArgumentException("Key does not exist: " + key);
+        if(!keyList.contains(key)) throw new IllegalArgumentException("Key does not exist: " + key);
         Optional<Node<V>> index = getNodeStream().filter(x -> x.token.equals(wanted)).findFirst();
         return index.orElseThrow();
     }
@@ -222,7 +221,7 @@ public class TrailMap<V> {
      *
     **/
     private ArrayList<Node<V>> findArrayList(String key) {
-        if(!startIndexMap.contains(key)) throw new IllegalArgumentException("Key does not exist: " + key);
+        if(!keyList.contains(key)) throw new IllegalArgumentException("Key does not exist: " + key);
         return nodes.stream().filter(
                 x -> x.stream().filter(
                         y -> y.token.getID() == 0)

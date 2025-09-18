@@ -18,7 +18,7 @@ public final class ANSIColor {
     }
 
 
-    protected ANSIColor(int id) {
+    ANSIColor(int id) {
         switch (id){
             case 1:
                 code = "\u001b[0m";//bold
@@ -37,7 +37,7 @@ public final class ANSIColor {
         }
     }
 
-    protected ANSIColor(String string) {
+    private ANSIColor(String string) {
         code = string;
     }
 
