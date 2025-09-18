@@ -35,5 +35,5 @@ jobs:
         with:
           name: Artifacts
           path: |
-            build/libs/
-            build/devlibs/
+            versions/1.21.8/build/libs/
+            versions/1.21.8/build/devlibs/

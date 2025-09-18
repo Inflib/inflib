@@ -78,12 +78,12 @@ public final class ReservedStuffManager {
         return RESERVED_CHARACTERS;
     }
 
-    @Deprecated
+    @Deprecated(since = "0.4.0")
     public static Integer getAltCodeOfCharacter(String character) {
         return ALT_CODES.get(character);
     }
 
-    @Deprecated
+    @Deprecated(since = "0.4.0")
     public static Integer getAltCodeOfCharacter(Character character) {
         return getAltCodeOfCharacter(character.toString());
     }

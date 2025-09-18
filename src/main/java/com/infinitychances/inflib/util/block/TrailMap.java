@@ -219,7 +219,7 @@ public class TrailMap<V> {
      * it gets the key of it and compares it to the wanted key. If there is no arraylist found, it throws an error.</p>
     * @param key the key that contains a specific trail
      * @author InfinityChances
-     * @
+     *
     **/
     private ArrayList<Node<V>> findArrayList(String key) {
         if(!startIndexMap.contains(key)) throw new IllegalArgumentException("Key does not exist: " + key);
