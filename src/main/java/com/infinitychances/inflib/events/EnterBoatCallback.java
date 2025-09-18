@@ -26,12 +26,13 @@ public interface EnterBoatCallback {
 
     /**
      * Callback for entering a boat
+     * Called at the end of the logic
      *
      * @Bug: when a boat is falling due to magma, the callback is still called.
      *
-     * @apiNote {@code ActionResult.SUCCESS} cancels further processing and continues with normal milking behavior.<br>
+     * @apiNote {@code ActionResult.SUCCESS} cancels further processing.<br>
      * {@code ActionResult.PASS} falls back to further processing and defaults to SUCCESS if no other listeners are available.<br>
-     * {@code ActionResult.FAIL} cancels further processing and does not milk the cow (unless manually done inside listeners).
+     * {@code ActionResult.FAIL} cancels further processing and does not call other listeners.
      */
     ActionResult interact(PlayerEntity player, Hand hand, AbstractBoatEntity boat);
 }
