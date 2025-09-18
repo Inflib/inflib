@@ -1,7 +1,7 @@
 package com.infinitychances.inflib.model;
 
 import static com.infinitychances.inflib.InfLib.LOGGER;
-import com.infinitychances.inflib.exceptions.InvalidInputException;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.data.BlockStateModelGenerator;
 import net.minecraft.client.data.Model;
@@ -14,9 +14,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 
-public class ExtModel{
-    private static HashMap<String, ExtModel> idMap = new HashMap<>();
-    private static ArrayList<String> usedIds = new ArrayList<>();
+public final class ExtModel{
+    private static final HashMap<String, ExtModel> idMap = new HashMap<>();
+    private static final ArrayList<String> usedIds = new ArrayList<>();
 
     public Model model;
     public String path;
@@ -63,15 +63,9 @@ public class ExtModel{
             default:
                 LOGGER.error("Invalid Type");
         }
-        if (type == ExtModelType.BLOCK_VARIANT) {
-            this.model = block(modOrigin, name, variant, textures);
-            this.path = "block/" + name;
-        } else {
-            LOGGER.error("Variant Not Supported With this type");
-        }
         String tempId = getID(type, name);
         if (!checkId(tempId)){
-            throw new InvalidInputException("DUPLICATE MODEL BEING CREATED", type + "§" + name);
+            throw new IllegalArgumentException("DUPLICATE MODEL BEING CREATED: " + type + "§" + name);
         }
         this.id = tempId;
         idMap.put(this.id, this);

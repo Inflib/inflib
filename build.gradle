@@ -3,7 +3,9 @@ plugins {
 	id 'maven-publish'
 }
 
-version = project.mod_version
+version = project.mod_version + "+" +project.minecraft_version
+minecraft_version = project.minecraft_version
+fabric_version = project.fabric_version
 group = project.maven_group
 
 base {
@@ -27,10 +29,13 @@ loom {
 	mods {
 		"inflib" {
 			sourceSet sourceSets.main
-			sourceSet sourceSets.client
+            sourceSet sourceSets.client
 		}
 	}
-
+    runConfigs.all {
+        ideConfigGenerated true // Run configurations are not created for subprojects by default
+        runDir "../../run" // Use a shared run folder and create separate worlds
+    }
 }
 
 fabricApi {
@@ -48,7 +53,7 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	
+    include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.5.0")))
 }
 
 test {
@@ -57,9 +62,13 @@ test {
 
 processResources {
 	inputs.property "version", project.version
-
+    inputs.property "minecraft", minecraft_version
+    inputs.property "fabric_api", fabric_version
+    def map = ["version": project.version,
+                "minecraft": minecraft_version,
+                "fabric_api": fabric_version]
 	filesMatching("fabric.mod.json") {
-		expand "version": project.version
+		expand map
 	}
 }
 
@@ -79,7 +88,7 @@ java {
 
 jar {
 	from("LICENSE") {
-		rename { "${it}_${project.base.archivesName.get()}"}
+		rename { "${it}_${project.base.archivesName.get()}" }
 	}
 }
 
@@ -87,9 +96,13 @@ jar {
 publishing {
 	publications {
 		create("mavenJava", MavenPublication) {
-			artifactId = project.archives_base_name
+            groupId = project.maven_group
+            artifactId = project.archives_base_name
+            version = project.mod_version
 			from components.java
 		}
+
+
 	}
 
 	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.

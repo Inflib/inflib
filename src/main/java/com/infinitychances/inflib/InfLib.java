@@ -1,7 +1,18 @@
 package com.infinitychances.inflib;
 
+import com.infinitychances.inflib.events.BreedAnimalCallback;
+import com.infinitychances.inflib.events.BreedFrogCallback;
+import com.infinitychances.inflib.events.BreedSnifferCallback;
+import com.infinitychances.inflib.events.EnterBoatCallback;
 import net.fabricmc.api.ModInitializer;
 
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.passive.SheepEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.ActionResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,257 +1,352 @@
 package com.infinitychances.inflib.util.block;
 
 import com.infinitychances.inflib.InfLib;
-import com.infinitychances.inflib.util.ansi.ANSIColor;
+import com.infinitychances.inflib.annotations.MayReturnNull;
+import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.commons.lang3.tuple.MutableTriple;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
-import static com.infinitychances.inflib.util.ansi.ANSIColors.*;
+import java.util.*;
+import java.util.stream.Stream;
 
-import java.util.HashMap;
 import static com.infinitychances.inflib.util.ReservedStuffManager.*;
 
-public class TrailMap<T> {
-    private HashMap<String, T> map = new HashMap<>();
-    private HashMap<String, Integer> holdMap = new HashMap<>();
-    
-    public TrailMap() {}
-    
-    private static String keyValue(String key, Boolean addColors) {
-        if(!addColors) {
-            return "KEY: " + key + ";" + " VALUES: ";
-        } else {
-            return new ANSIColor(72, 161, 69).addBold().toString() + "KEY:" + RESET + " " + key + ";" +
-                    " " + new ANSIColor(66, 90, 125).addBold().toString() + "VALUES:" + RESET + " ";
-        }
+/**
+ * @param <V> the type of trailmap to be created
+ * @since v0.3.0
+ */
+public class TrailMap<V> {
+    private final List<String> startIndexMap = new ArrayList<>();
+    protected final ArrayList<ArrayList<Node<V>>> nodes = new ArrayList<>();
+    private ArrayList<Node<V>> lastCheckedList = null;
+    private String lastCheckedKey = null;
+
+    private final Node<V> NULL_NODE = new Node<>(TrailToken.NULL_TOKEN, null, TrailToken.NULL_TOKEN, TrailToken.NULL_TOKEN);
+
+    public TrailMap() {
     }
-    
-    //Do not map empty ArrayLists, HashMaps, Maps, etc...
+
+    private static TrailToken tokenize(String key, Integer id) {
+        return new TrailToken(key, id);
+    }
+
+    private static MutablePair<String, Integer> deTokenize(TrailToken key) {
+        MutableTriple<String, String, Integer> triple = key.getInfo();
+        return MutablePair.of(triple.left, triple.right);
+    }
+
+    /**
+     * Maps the values as nodes referencing each other, with a key
+     * <p>Takes the {@code values} and turns them into a {@code Node}, which contains a {@code TrailToken}, which holds the token for
+     * each node. Each node also contains previous and next values, which hold a {@code TrailToken} that refers to the
+     * next and previous nodes, respectively. The node also holds the value itself. Then after creation of the nodes, they are placed in a
+     * 2d arraylist, with each nested array containing all the nodes for the key. If an arraylist already exists for the key, then the nodes
+     * are simply inserted into the arraylist.
+     * @author InfinityChances
+     * @param key the key that holds a specific trail of values
+     * @param values all the values, in order from first to last, that are to go in said key
+     *
+     * @return The current instance of {@code TrailMap<T>}
+     */
     @SafeVarargs
-    public final TrailMap<T> map(String key, T... listOrder) {
-        if(holdMap != null && holdMap.containsKey(key)) {
-            throw new IllegalArgumentException("Key cannot be the same as another one!");
+    public final TrailMap<V> map(String key, V... values) {
+        lastCheckedKey = null;
+        if (isReserved(key)) {
+            throw new IllegalArgumentException("Key must not contain any reserved characters!");
         }
-        if(isReserved(key) || hasNumber(key)) {
-            throw new IllegalArgumentException("Key cannot contain a reserved character or a number!");
+        if(!startIndexMap.contains(key)) {
+            ArrayList<Node<V>> nodes = new ArrayList<>();
+            for (int i = 0; i < values.length; i++) {
+                TrailToken token = tokenize(key, i);
+                V value = values[i];
+                Node<V> node = new Node<>(token, value, i+1 != values.length ? tokenize(key, i+1) : TrailToken.NULL_TOKEN, i != 0 ? tokenize(key, i-1) : TrailToken.NULL_TOKEN);
+                nodes.add(node);
+                if(i == 0) {
+                    startIndexMap.add(key);
+                }
+            }
+            this.nodes.add(nodes);
+        } else {
+            ArrayList<Node<V>> list = findArrayList(key);
+            if(list == null) throw new RuntimeException("No Arraylist found.");
+            int arrayLen = list.toArray().length;
+            for (int i = 0; i < values.length; i++) {
+                TrailToken token = tokenize(key, i + arrayLen);
+                V value = values[i];
+                Node<V> node = new Node<>(token, value, i+1 != values.length ? tokenize(key, i+1+arrayLen) : TrailToken.NULL_TOKEN, tokenize(key, i-1+arrayLen));
+                if(i == 0) {
+                    getNodeFromId(key, arrayLen-1).setNext(token);
+                }
+                list.add(node);
+            }
         }
-        int iterate = 0;
-        for(T object : listOrder) {
-            map.put(tokenize(key, iterate), object);
-            iterate++;
-        }
-        holdMap.put(key, iterate);
         return this;
     }
-    
-    /*TOKEN HANDLERS*/
 
-    public static String tokenize(String key, int count) {
-        if(count < 0) {
-            throw new IllegalArgumentException("cannot tokenize a negative value!");
-        }
-        return key + SPLIT_CHAR + count;
-    }
-
-    public static String tokenize(String key) {
-        return tokenize(key, 0);
-    }
-
-    private static String[] detokenize(String token) {
-        return token.split(SPLIT_CHAR);
-    }
-    
-    /*MAIN TOOLS*/
-    
-    public T getFromIndex(String key, Integer index) {
-        return map.get(tokenize(key, index));
-    }
-    
-    public void replaceFromIndex(String key, Integer index, T item) {
-        if(!holdMap.containsKey(key)) {
-            throw new IllegalArgumentException("Key does not exist!");
-        }
-        if(!map.containsKey(tokenize(key, index))) {
-            throw new IllegalArgumentException("Cannot create new values!");
-        }
-        map.replace(tokenize(key, index), item);
-    }
-
-    public T getNextFromIndex(String key, Integer index) {
-        if(!holdMap.containsKey(key)) {
-            throw new IllegalArgumentException("Key does not exist!");
-        }
-        return map.get(tokenize(key, index+1));
-    }
-
-    public T getNextInChain(String key, T item) {
-        if(item == null) {
-            throw new IllegalArgumentException("Item cannot be null!");
-        }
-        if(!holdMap.containsKey(key)) {
-            throw new IllegalArgumentException("Key does not exist!");
-        } else if (!map.containsValue(item)) {
-            throw new IllegalArgumentException("Value does not exist!");
-        }
-        for(int i=0; i < holdMap.get(key); i++) {
-            //inferences to get first value with same type.
-            String newKey = tokenize(key, i);
-            T currentCheck = map.get(tokenize(key, i+1));
-            if(map.get(newKey).equals(item)) {
-                return currentCheck;
-            }
-        }
-        return null;
-    }
-    
-    public T getPreviousFromIndex(String key, Integer index) {
-        if(!holdMap.containsKey(key)) {
-            throw new IllegalArgumentException("Key does not exist!");
-        }
-        return index < 1 ? null : map.get(tokenize(key, index-1));
-    }
-    
-    public T getPreviousInChain(String key, T item) {
-        if(item == null) {
-            throw new IllegalArgumentException("Item cannot be null!");
-        }
-        if(!holdMap.containsKey(key)) {
-            throw new IllegalArgumentException("Key does not exist!");
-        } else if (!map.containsValue(item)) {
-            throw new IllegalArgumentException("Value does not exist!");
-        }
-        for(int i=holdMap.get(key) - 1 ; i >= 0; i--) {
-            //inferences to get first value with same type.
-            String newKey = tokenize(key, i);
-            T currentCheck = map.get(tokenize(key, i-1));
-            if(map.get(newKey).equals(item)) {
-                return currentCheck;
-            }
-        }
-        return null;
-    }
-    
-    public void addToEnd(String key, T item) {
-        if(!holdMap.containsKey(key)) {
-            throw new IllegalArgumentException("Key does not exist!");
-        }
-        Integer index = holdMap.get(key);
-        map.put(tokenize(key, index), item);
-        holdMap.replace(key, index+1);
-    }
-    
-    public void insert(String key, Integer index, T item) {
-        if(!holdMap.containsKey(key)) {
-            throw new IllegalArgumentException("Key does not exist!");
-        }
-        index = Math.clamp(index, 0, holdMap.get(key));
-        if(index.intValue() == holdMap.get(key).intValue()) {
-            addToEnd(key, item);
+    @SafeVarargs
+    public final void insertAtBeginning(String key, V... values) {
+        lastCheckedKey = null;
+        if(!startIndexMap.contains(key)) {
+            InfLib.LOGGER.warn("TRAILMAP KEY NOT FOUND: " + key + " CREATING NEW STORAGE FOR KEY.");
+            map(key, values);
             return;
         }
-        for(int i = (holdMap.get(key) - 1); i >= index; i--) {
-            map.put(tokenize(key, i+1), map.remove(tokenize(key, i)));
-            //starts from the highest value, bumps them all up until there is one spot left for the new value
+        ArrayList<Node<V>> currentList = findArrayList(key);
+        currentList.getFirst().setPrevious(new TrailToken(key, values.length-1));
+        for (int i = 0; i < currentList.toArray().length; i++) {
+            Node<V> currentNode = currentList.get(i);
+            currentNode.setPrevious(new TrailToken(key, currentNode.token.getID() + values.length -1));
+            currentNode.setNext(new TrailToken(key, currentNode.token.getID() + values.length +1));
+            currentNode.incrementToken(values.length);
         }
-        holdMap.replace(key, holdMap.get(key)+1);
-        map.put(tokenize(key, index), item);
-    }
-    
-    public void addToBeginning(String key, T item) {
-        insert(key, 0, item);
-    }
-    
-    /*LOOPED VERSIONS*/
-    
-    @SafeVarargs
-    public final void addToEnd(String key, T... items) {
-        for(T val : items) {
-            addToEnd(key, val);
-        }
-    }
-    
-    @SafeVarargs
-    public final void insert(String key, Integer index, T... items) {
-        Integer i = index;
-        for(T item : items) {
-            insert(key, i, item);
-            i++;
-        }
-    }
-    
-    @SafeVarargs
-    public final void addToBeginning(String key, T... items) {
-        for(int i = items.length - 1; i >= 0; i--) {
-            addToBeginning(key, items[i]);
-        }
-    }
-    
-    /*STRING AND PRINT MANAGERS*/
-    
-    //creates the toString method to mention each key and value chain.
-    @Override
-    public String toString() {
-        StringBuilder string = new StringBuilder();
-        for(String key : holdMap.keySet()) {
-            Integer count = holdMap.get(key);
-            string.append(keyValue(key, false));
-            for(int i = 0; i < count; i++) {
-                String item = map.get(tokenize(key, i)).toString();
-                string.append(item);
-                if(i != count - 1) {
-                    string.append(", ");
-                } else {
-                    string.append("; ");
-                }
+        for (int i = values.length-1; i >=0; i--) {
+            Node<V> newNode = new Node<>(new TrailToken(key, i), values[i], new TrailToken(key, i+1), new TrailToken(key, i-1));
+            if(i==0) {
+                newNode.setPrevious(TrailToken.NULL_TOKEN);
             }
+            currentList.addFirst(newNode);
         }
-        return string.toString();
     }
-    
-    public String toString(Boolean addColors) {
-        StringBuilder string = new StringBuilder();
-        for(String key : holdMap.keySet()) {
-            Integer count = holdMap.get(key);
-            string.append(keyValue(key, true));
-            for(int i = 0; i < count; i++) {
-                String item = map.get(tokenize(key, i)).toString();
-                string.append(item);
-                if(i != count - 1) {
-                    string.append(", ");
-                } else {
-                    string.append("; ");
-                }
-            }
+
+    /**
+     * Inserts the given value at an index inside a certain key
+     *
+     * @param key the key for a group of values
+     * @param index the index being inserted at (starts at 0)
+     * @param value the requested value to insert
+     */
+    public void insertAtIndex(String key, Integer index, V value) {
+        lastCheckedKey = null;
+        ArrayList<Node<V>> currentList = findArrayList(key);
+        if(index == currentList.toArray().length) {
+            insertAtEnd(key, value);
+            return;
         }
-        return string.toString();
-    }
-    
-    public void print() {
-        InfLib.LOGGER.info(this.toString());
-    }
-    
-    public void print(Boolean addColors) {
-        InfLib.LOGGER.info(this.toString(addColors));
-    }
-    
-    public void printKey(String key) {
-        printKey(key, false);
-    }
-    
-    public void printKey(String key, Boolean addColors) {
-        if(!holdMap.containsKey(key)) {
+        if(index == 0) {
+            insertAtBeginning(key, value);
+            return;
+        }
+        if(!startIndexMap.contains(key)) {
+            InfLib.LOGGER.error("NO KEY FOUND");
             throw new IllegalArgumentException("Key does not exist!");
         }
-        //basically just the toString method.
-        StringBuilder string = new StringBuilder();
-        Integer count = holdMap.get(key);
-        string.append(keyValue(key, addColors));
-        for(int i = 0; i < count; i++) {
-            String item = map.get(tokenize(key, i)).toString();
-            string.append(item);
-            if(i != count - 1) {
-                string.append(", ");
-            } else {
-                string.append("; ");
-            }
+
+        TrailToken token = new TrailToken(key, index);
+
+            Node<V> previousNode = getNodeFromId(key, index-1);
+            previousNode.setNext(token);
+
+        Node<V> inserted = new Node<>(token, value, new TrailToken(key, index+1), new TrailToken(key, index-1));
+        for (int i = index; i < currentList.toArray().length; i++) {
+            Node<V> currentNode = currentList.get(i);
+            currentNode.incrementToken();
+            currentNode.setPrevious(new TrailToken(key, currentNode.token.getID() -1));
+
+            currentNode.setNext(new TrailToken(key, currentNode.token.getID() + 1));
         }
-        InfLib.LOGGER.info(string.toString());
+        currentList.add(index, inserted);
+    }
+
+    @SafeVarargs
+    public final void insertAtEnd(String key, V... values) {
+        if(!startIndexMap.contains(key)) {
+            InfLib.LOGGER.warn("TRAILMAP KEY NOT FOUND: " + key + " CREATING NEW STORAGE FOR KEY.");
+        }
+
+        map(key, values);
+    }
+
+    @MayReturnNull
+    public V getNextFromId(String key, Integer id) {
+        Node<V> node = getNodeFromId(key, id);
+        return node.next(this).getValue();
+    }
+
+    @MayReturnNull
+    public V getPreviousFromId(String key, Integer id) {
+        Node<V> node = getNodeFromId(key, id);
+        return node.previous(this).getValue();
+    }
+
+    @MayReturnNull
+    public V getFromId(String key, Integer id) {
+        return getNodeFromId(key, id).getValue();
+    }
+
+    @MayReturnNull
+    public V getNext(String key, V value) {
+        return getNodeFromValue(key, value).next(this).getValue();
+    }
+
+    @MayReturnNull
+    public V getPrevious(String key, V value) {
+        return getNodeFromValue(key, value).previous(this).getValue();
+    }
+
+    protected Node<V> getNodeFromValue(String key, V value) {
+        ArrayList<Node<V>> array;
+        if(!Objects.equals(lastCheckedKey, key)) {
+            array = findArrayList(key);
+            lastCheckedList = array;
+            lastCheckedKey = key;
+        } else {
+            array = lastCheckedList;
+        }
+        return array.stream().filter(x -> x.value.equals(value))
+            .findFirst().orElseThrow();
+    }
+
+    protected Node<V> getNodeFromId(String key, Integer id) {
+        TrailToken wanted = tokenize(key, id);
+        if(!startIndexMap.contains(key)) throw new IllegalArgumentException("Key does not exist: " + key);
+        Optional<Node<V>> index = getNodeStream().filter(x -> x.token.equals(wanted)).findFirst();
+        return index.orElseThrow();
+    }
+
+    private Node<V> getNodeFromToken(TrailToken token) {
+        return getNodeFromId(token.getKey(), token.getID());
+    }
+
+    //Returns the 2d arraylist mapped into a 1d stream.
+    private Stream<Node<V>> getNodeStream() {
+        return nodes.stream().flatMap(ArrayList::stream);
+    }
+
+    /**
+    * Iterates over each arraylist inside the 2d arraylist of nodes to find the arraylist that contains nodes for a specific key.
+    * <p>It first streams the 2d arraylist to get each arraylist, then filters by streaming each list and looking for the node with the id of 0. Once it has that node,
+     * it gets the key of it and compares it to the wanted key. If there is no arraylist found, it throws an error.</p>
+    * @param key the key that contains a specific trail
+     * @author InfinityChances
+     * @
+    **/
+    private ArrayList<Node<V>> findArrayList(String key) {
+        if(!startIndexMap.contains(key)) throw new IllegalArgumentException("Key does not exist: " + key);
+        return nodes.stream().filter(
+                x -> x.stream().filter(
+                        y -> y.token.getID() == 0)
+                        .findFirst().orElseThrow().token.getKey().equals(key)).findFirst().orElseThrow();
+    }
+
+    /**
+     *
+     */
+    public void print() {
+        InfLib.LOGGER.info(nodes.toString());
+    }
+
+
+    protected static class TrailToken {
+        MutableTriple<String, String, Integer> triplet;
+
+        public static final TrailToken NULL_TOKEN = new TrailToken();
+
+        private TrailToken(String key, Integer id) {
+            this.triplet = new MutableTriple<>(key, makeToken(key, id), id);
+        }
+
+        private TrailToken() {
+            this.triplet = new MutableTriple<>(null, "null", null);
+        }
+
+        private static String makeToken(String key, Integer id) {
+            return key + SPLIT_CHAR + id.toString();
+        }
+
+        public boolean equals(TrailToken k) {
+            return Objects.equals(triplet.middle, k.triplet.middle);
+        }
+
+        private MutableTriple<String, String, Integer> getInfo() {
+            return this.triplet;
+        }
+
+        private String getKey() {
+            return this.triplet.left;
+        }
+
+        private String getToken() {
+            return this.triplet.middle;
+        }
+
+        private Integer getID() {
+            return this.triplet.right;
+        }
+
+        private void incrementId() {
+            int newId = triplet.right + 1;
+            triplet.setRight(newId);
+            triplet.setMiddle(makeToken(triplet.left, newId));
+        }
+        private void incrementId(Integer amount) {
+            int newId = triplet.right + amount;
+            triplet.setRight(newId);
+            triplet.setMiddle(makeToken(triplet.left, newId));
+        }
+
+        private void decrementId() {
+            int newId = triplet.right - 1;
+            triplet.setRight(newId);
+            triplet.setMiddle(makeToken(triplet.left, newId));
+        }
+    }
+
+    protected static class Node<V> {
+        TrailToken token;
+        V value;
+        TrailToken next;
+        TrailToken previous;
+
+        public Node(TrailToken token, V value, @Nullable TrailToken next, @Nullable TrailToken previous) {
+            this.token = token;
+            this.value = value;
+            this.next = next;
+            this.previous = previous;
+        }
+
+        public void setNext(TrailToken next) {
+            this.next = next;
+        }
+
+        public void setPrevious(TrailToken previous) {
+            this.previous = previous;
+        }
+
+        public V getValue() {
+            return value;
+        }
+
+        public TrailToken getToken() {
+            return token;
+        }
+
+        @Override
+        public String toString() {
+            return "{ " + token.getInfo().toString() + " " + value.toString() + " " + next.getInfo().toString() + " " + previous.getInfo().toString() + " }";
+        }
+
+        public void incrementToken() {
+            incrementToken(1);
+        }
+
+        public void incrementToken(Integer amount) {
+            token.incrementId(amount);
+        }
+
+        public Node<V> next(TrailMap<V> map) {
+            TrailToken nextToken = this.next;
+            if(nextToken.equals(TrailToken.NULL_TOKEN)) return map.NULL_NODE;
+            return map.getNodeFromToken(nextToken);
+        }
+        public Node<V> previous(TrailMap<V> map) {
+            TrailToken previousToken = this.previous;
+            if(previousToken.equals(TrailToken.NULL_TOKEN)) return map.NULL_NODE;
+            return map.getNodeFromToken(previousToken);
+        }
+
+        public boolean equals(Node<V> other) {
+            return value.equals(other.value) && token.equals(other.token);
+        }
     }
 }
