@@ -2,6 +2,7 @@ package com.infinitychances.inflib.util.block;
 
 import com.infinitychances.inflib.InfLib;
 import com.infinitychances.inflib.annotations.MayReturnNull;
+import com.infinitychances.inflib.annotations.VersionResistant;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.jetbrains.annotations.Nullable;
@@ -13,8 +14,9 @@ import static com.infinitychances.inflib.util.ReservedStuffManager.*;
 
 /**
  * @param <V> the type of trailmap to be created
- * @since v0.3.0
+ * @since 0.3.0
  */
+@VersionResistant
 public class TrailMap<V> {
     private final List<String> keyList = new ArrayList<>();
     protected final ArrayList<ArrayList<Node<V>>> nodes = new ArrayList<>();

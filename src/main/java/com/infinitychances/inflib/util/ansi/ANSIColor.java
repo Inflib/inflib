@@ -1,7 +1,8 @@
 package com.infinitychances.inflib.util.ansi;
 
-import com.infinitychances.inflib.InfLib;
+import com.infinitychances.inflib.annotations.VersionResistant;
 
+@VersionResistant
 public final class ANSIColor {
     private final String code;
 

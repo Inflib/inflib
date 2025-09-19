@@ -1,10 +1,12 @@
 package com.infinitychances.inflib.util;
 
 
+import com.infinitychances.inflib.annotations.VersionResistant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+@VersionResistant
 public final class ReservedStuffManager {
     private ReservedStuffManager() {}
 
