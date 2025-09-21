@@ -1,4 +1,4 @@
-package com.infinitychances.inflib.util.block;
+package com.infinitychances.inflib.util.map;
 
 import com.infinitychances.inflib.InfLib;
 import com.infinitychances.inflib.annotations.MayReturnNull;
@@ -53,8 +53,8 @@ public class TrailMap<V> {
     @SafeVarargs
     public final TrailMap<V> map(String key, V... values) {
         lastCheckedKey = null;
-        if (isReserved(key)) {
-            throw new IllegalArgumentException("Key must not contain any reserved characters!");
+        if (isReserved(key).getLeft()) {
+            throw new IllegalArgumentException("Key must not contain any reserved characters! Character:" + isReserved(key).getRight());
         }
         if(!keyList.contains(key)) {
             ArrayList<Node<V>> nodes = new ArrayList<>();
@@ -147,6 +147,13 @@ public class TrailMap<V> {
             currentNode.setNext(new TrailToken(key, currentNode.token.getID() + 1));
         }
         currentList.add(index, inserted);
+    }
+
+    @SafeVarargs
+    public final void insertAtIndex(String key, Integer index, V... values) {
+        for(int i = values.length-1; i>=0; i--) {
+            insertAtIndex(key, index, values[i]);
+        }
     }
 
     @SafeVarargs

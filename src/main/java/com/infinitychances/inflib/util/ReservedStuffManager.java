@@ -2,6 +2,8 @@ package com.infinitychances.inflib.util;
 
 
 import com.infinitychances.inflib.annotations.VersionResistant;
+import net.minecraft.util.Pair;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,17 +27,20 @@ public final class ReservedStuffManager {
     private static final String[] NUMBERS = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
     private static final String[] LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
-    public static boolean isReserved(String string) {
+    public static Pair<Boolean, Character> isReserved(String string) {
         boolean b = false;
+        char c = ' ';
         for(String str : RESERVED_CHARACTERS) {
             b = string.contains(str);
+            c = str.toCharArray()[0];
             if(b) {break;}
         }
         for(String str : TEMP_RESERVED) {
             b = string.contains(str);
+            c = str.toCharArray()[0];
             if(b) {break;}
         }
-        return b;
+        return new Pair<>(b, c);
     }
 
     public static boolean isReserved(String string, Boolean runExtraList) {
