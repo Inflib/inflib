@@ -31,12 +31,12 @@ jobs:
         run: ./gradlew build
       - name: flatten directory
         run: |
-          mkdir -p temp-artifact
-          cp -r versions/**/build/libs/
-          cp -r versions/**/build/devlibs/
+          mkdir -p ./temp-artifact
+          cp -r versions/**/build/libs/ ./temp-artifact/
+          cp -r versions/**/build/devlibs/ ./temp-artifact/
       - name: capture build artifacts
         if: ${{ matrix.java == '21' }} # Only upload artifacts built from latest java
         uses: actions/upload-artifact@v4
         with:
           name: Artifacts
-          path: temp-artifact/
+          path: ./temp-artifact/
