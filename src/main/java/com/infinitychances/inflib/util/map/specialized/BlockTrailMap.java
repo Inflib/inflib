@@ -10,6 +10,26 @@ public class BlockTrailMap extends SingleTrailMap<Block> {
 
     public BlockTrailMap(String key) {
         super(key);
-
     }
+
+    /*
+    getBlastResistance
+    getSlipperiness
+    getVelocityMultiplier
+    getJumpVelocityMultiplier
+    getDefaultState
+    asItem
+    getRegistryEntry
+    //Abstract Block
+    getCodec
+    getRenderType
+    hasComparatorOutput
+    getMaxHorizontalModelOffset
+    getVerticalModelOffsetMultiplier
+    getRequiredFeatures
+    getOpacity
+    getLootTableKey
+    getTranslationKey
+    getHardness
+     */
 }

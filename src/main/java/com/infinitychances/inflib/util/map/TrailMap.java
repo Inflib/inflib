@@ -329,6 +329,14 @@ public class TrailMap<V> {
             return token;
         }
 
+        public TrailToken getNext() {
+            return next;
+        }
+
+        public TrailToken getPrevious() {
+            return previous;
+        }
+
         @Override
         public String toString() {
             return "{ " + token.getInfo().toString() + " " + value.toString() + " " + next.getInfo().toString() + " " + previous.getInfo().toString() + " }";
