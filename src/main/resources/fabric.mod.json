@@ -1,51 +1,54 @@
 {
-	"schemaVersion": 1,
-	"id": "inflib",
-	"version": "${version}",
-	"name": "InfLib",
-	"description": "Library containing useful methods and classes made to speed up modding!",
-	"authors": [
-		"Infinitychances"
-	],
-	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/Infinitychances/inflib"
-	},
-	"license": "MIT",
-	"icon": "assets/inflib/inflib_square.png",
-	"environment": "*",
-	"entrypoints": {
-		"main": [
-			"com.infinitychances.inflib.InfLib"
-		],
-		"client": [
-			"com.infinitychances.inflib.InfLibClient"
-		]
-	},
-	"mixins": [
-		"inflib.mixins.json",
-		{
-			"config": "inflib.client.mixins.json",
-			"environment": "client"
-		}
-	],
-	"depends": {
-		"fabricloader": ">=0.17.2",
-		"minecraft": "${minecraft}",
-		"java": ">=21",
-		"fabric-api": "~${fabric_api}"
-	},
-	"suggests": {
-		"another-mod": "*",
-		"sodium": ">=0.6.0"
-	},
-	"custom": {
-		"modmenu": {
-			"links": {
-				"modmenu.github_releases": "https://github.com/InfinityChances/inflib/releases"
-			},
-			"badges": [ "library" ],
-			"update_checker": true
-		}
-	}
+  "schemaVersion": 1,
+  "id": "inflib",
+  "version": "${version}",
+  "name": "InfLib",
+  "description": "Library containing useful methods and classes made to speed up modding!",
+  "authors": [
+    "Infinitychances"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/Infinitychances/inflib",
+    "issues": "https://github.com/Inflib/inflib/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/inflib/inflib_square.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.infinitychances.inflib.InfLib"
+    ],
+    "client": [
+      "com.infinitychances.inflib.InfLibClient"
+    ]
+  },
+  "mixins": [
+    "inflib.mixins.json",
+    {
+      "config": "inflib.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader}",
+    "minecraft": "${minecraft}",
+    "java": ">=21",
+    "fabric-api": "~${fabric_api}"
+  },
+  "suggests": {
+    "another-mod": "*",
+    "sodium": ">=0.6.0"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.github_releases": "https://github.com/InfinityChances/inflib/releases"
+      },
+      "badges": [
+        "library"
+      ],
+      "update_checker": true
+    }
+  }
 }

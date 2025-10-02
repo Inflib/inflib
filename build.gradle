@@ -4,8 +4,6 @@ plugins {
 }
 
 version = project.mod_version + "+" +project.minecraft_version
-minecraft_version = project.minecraft_version
-fabric_version = project.fabric_version
 group = project.maven_group
 
 base {
@@ -64,9 +62,11 @@ processResources {
 	inputs.property "version", project.version
     inputs.property "minecraft", minecraft_version
     inputs.property "fabric_api", fabric_version
+    inputs.property "loader", loader_version
     def map = ["version": project.version,
                 "minecraft": minecraft_version,
-                "fabric_api": fabric_version]
+                "fabric_api": fabric_version,
+                "loader": loader_version]
 	filesMatching("fabric.mod.json") {
 		expand map
 	}
@@ -98,7 +98,7 @@ publishing {
 		create("mavenJava", MavenPublication) {
             groupId = project.maven_group
             artifactId = project.archives_base_name
-            version = project.mod_version
+            version = version
 			from components.java
 		}
 
