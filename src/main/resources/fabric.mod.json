@@ -34,7 +34,7 @@
     "fabricloader": ">=${loader}",
     "minecraft": "${minecraft}",
     "java": ">=21",
-    "fabric-api": "~${fabric_api}"
+    "fabric-api": ">=${fabric_api}"
   },
   "suggests": {
     "another-mod": "*",

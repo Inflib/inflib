@@ -17,6 +17,13 @@ plugins {
     id("dev.kikugie.stonecutter") version "0.7.7"
 }
 
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        maven { url 'https://jitpack.io'}
+    }
+}
+
 stonecutter {
     kotlinController = false
     centralScript = "build.gradle"
