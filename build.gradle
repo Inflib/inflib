@@ -3,11 +3,15 @@ plugins {
 	id 'maven-publish'
 }
 
-version = project.mod_version + "+" +project.minecraft_version
+version = project.mod_version + "+" + project.minecraft_version
 group = project.maven_group
 
 base {
 	archivesName = project.archives_base_name
+}
+
+subprojects {
+    apply plugin: 'maven-publish'
 }
 
 repositories {
