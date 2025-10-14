@@ -2,6 +2,7 @@ package com.infinitychances.inflib.util.map;
 
 import com.infinitychances.inflib.InfLib;
 import com.infinitychances.inflib.annotations.MayReturnNull;
+import com.infinitychances.inflib.annotations.VersionResistant;
 
 import java.util.Random;
 
@@ -10,6 +11,7 @@ import java.util.Random;
  * @param <V> The type of trailmap to be used
  * @since 0.4.2
  */
+@VersionResistant
 public class SingleTrailMap<V> {
     private String key;
     private TrailMap<V> trailMap = new TrailMap<>();
